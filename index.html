@@ -8,12 +8,11 @@
         :root {
             --bg-color: #08080b;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0b8;
-            --accent: #c49be8; /* Higher contrast artsy violet */
+            --text-secondary: #a8a8ba;
+            --accent: #c49be8; /* Soft artsy violet */
             --accent-dim: rgba(196, 155, 232, 0.25);
-            --nav-bg: rgba(8, 8, 11, 0.92);
-            --card-bg: rgba(12, 12, 18, 0.65);
-            --border: rgba(163, 133, 185, 0.25);
+            --nav-bg: rgba(8, 8, 11, 0.85);
+            --border: #161622;
         }
 
         * {
@@ -36,7 +35,7 @@
             position: relative;
         }
 
-        /* Fixed Background Layer: Darkened gradient for optimal readability */
+        /* Fixed Background Layer: Reduced gradient opacity to make the artwork significantly brighter */
         body::before {
             content: "";
             position: fixed;
@@ -48,9 +47,9 @@
             background-image: 
                 linear-gradient(
                     to bottom, 
-                    rgba(8, 8, 11, 0.95) 0%, 
-                    rgba(8, 8, 11, 0.75) 40%, 
-                    rgba(8, 8, 11, 0.80) 70%, 
+                    rgba(8, 8, 11, 0.85) 0%, 
+                    rgba(8, 8, 11, 0.35) 40%, 
+                    rgba(8, 8, 11, 0.45) 75%, 
                     #08080b 100%
                 ),
                 url('https://image.tmdb.org/t/p/original/zEweaWb2LrGmktKAGue7UFkx0O4.jpg');
@@ -69,24 +68,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2.5rem;
+            padding: 2rem 2.5rem;
             background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .nav-logo {
             font-family: monospace;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text-primary);
             text-decoration: none;
-            font-weight: bold;
+            opacity: 0.95;
             flex-shrink: 0;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
         }
 
         .nav-links {
@@ -98,12 +97,13 @@
         .nav-links a {
             font-family: monospace;
             font-size: 0.85rem;
-            color: var(--text-secondary);
+            color: #d0d0e0;
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: color 0.3s ease, text-shadow 0.3s ease;
             white-space: nowrap;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
         }
 
         .nav-links a:hover {
@@ -111,52 +111,39 @@
             text-shadow: 0 0 10px var(--accent-dim);
         }
 
-        /* Main Grid Frame */
+        /* Artsy Split Layout Frame */
         main {
             width: 100%;
             max-width: 900px;
             display: grid;
             grid-template-columns: 1.2fr 1fr;
             align-items: center;
-            gap: 2.5rem;
+            gap: 4rem;
             margin: auto auto 2rem auto; 
             padding-top: 140px; 
         }
 
-        /* Left Side Header Frame */
+        /* Left side: Big, structural typography */
         .brand-axis {
             text-align: right;
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         h1 {
-            font-size: 3.8rem;
+            font-size: 4rem;
             font-weight: 400;
             font-style: italic;
-            letter-spacing: -1px;
-            line-height: 1;
-            background: linear-gradient(to bottom, #ffffff 50%, #d0d0e0);
+            letter-spacing: -2px;
+            line-height: 0.95;
+            background: linear-gradient(to bottom, #ffffff 40%, #b8b8cb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.95));
         }
 
-        /* Right Side Content Block */
+        /* Right side: The Statement Content */
         .statement-axis {
-            background: var(--card-bg);
-            border-left: 3px solid var(--accent);
-            padding: 2rem;
-            border-radius: 0 8px 8px 0;
-            backdrop-filter: blur(8px);
-            border-top: 1px solid var(--border);
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-left: 2px solid var(--accent);
+            padding: 1.5rem 0 1.5rem 3rem;
         }
 
         .home-quote {
@@ -164,21 +151,22 @@
             color: #ffffff;
             line-height: 1.8;
             font-style: italic;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+            margin-bottom: 0.8rem;
+            /* Heavy contrast glow/shadow around text for maximum legibility on bright backgrounds */
+            text-shadow: 0 2px 12px #000000, 0 0 4px #000000;
         }
 
         .quote-source {
             font-family: monospace;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 2px;
             display: block;
-            font-weight: bold;
+            text-shadow: 0 2px 8px #000000;
         }
 
-        /* Call to Action Container */
+        /* Grouped Layout Container */
         .cta-container {
             display: flex;
             flex-direction: column;
@@ -186,73 +174,67 @@
             text-align: center;
             gap: 1.2rem; 
             margin-bottom: auto; 
-            padding: 1.5rem 2rem 2.5rem 2rem;
+            padding-bottom: 2rem;
             width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .repo-notice {
             display: block;
             font-family: 'Georgia', serif;
-            font-size: 1.05rem; 
+            font-size: 1rem; 
             font-style: italic;
             line-height: 1.5;
-            color: #e0e0ec;
+            color: #f0f0f8;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+            max-width: 400px;
+            text-shadow: 0 2px 12px #000000, 0 0 4px #000000;
         }
 
-        /* Action Link Button */
+        /* Striking Monolith Action Link */
         .monolith-btn {
             display: inline-block;
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
             color: #ffffff;
-            background: rgba(163, 133, 185, 0.2);
+            background: rgba(8, 8, 11, 0.85);
             text-decoration: none;
             border: 1px solid var(--accent);
-            padding: 1rem 2.5rem; 
-            box-shadow: 0 0 20px var(--accent-dim);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-            border-radius: 4px;
+            padding: 0.9rem 2.25rem; 
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9), 0 0 15px var(--accent-dim);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(8px);
         }
 
         .monolith-btn:hover {
             background: var(--accent);
-            color: #08080b;
-            box-shadow: 0 0 30px rgba(196, 155, 232, 0.6);
+            color: var(--bg-color);
+            box-shadow: 0 0 25px rgba(196, 155, 232, 0.6);
             transform: translateY(-2px);
         }
 
         /* Footer */
         footer {
             font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: #a0a0b8;
+            letter-spacing: 1.5px;
             text-align: center;
             width: 100%;
-            padding: 20px 0;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
+            padding-top: 20px;
+            text-shadow: 0 2px 8px #000000;
         }
 
-        /* Responsive adjustments */
+        /* Responsive collapse for tablets/phones */
         @media (max-width: 768px) {
             body::before {
                 background-position: center center;
             }
 
             nav {
-                padding: 1.2rem 1.5rem;
+                padding: 1.5rem 1.5rem;
                 flex-direction: column;
                 gap: 1rem;
             }
@@ -263,14 +245,15 @@
 
             .nav-links a {
                 font-size: 0.75rem;
+                letter-spacing: 1px;
             }
 
             main {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 2.5rem;
                 text-align: center;
-                padding-top: 150px; 
-                margin-bottom: 2rem;
+                padding-top: 140px; 
+                margin-bottom: 3rem;
             }
 
             .brand-axis { 
@@ -279,12 +262,22 @@
 
             h1 { 
                 font-size: 2.8rem; 
+                letter-spacing: -1px;
+                margin-bottom: 0.5rem; 
             }
 
             .statement-axis {
                 border-left: none;
-                border-top: 3px solid var(--accent);
-                border-radius: 0 0 8px 8px;
+                border-top: 2px solid var(--accent);
+                padding: 2rem 1rem 0 1rem;
+            }
+
+            .home-quote {
+                font-size: 1.1rem;
+            }
+
+            .cta-container {
+                padding-bottom: 1rem;
             }
         }
 
@@ -293,7 +286,7 @@
                 gap: 0.8rem;
             }
             h1 {
-                font-size: 2.2rem;
+                font-size: 2.4rem;
             }
         }
     </style>
