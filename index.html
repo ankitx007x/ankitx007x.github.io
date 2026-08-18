@@ -10,7 +10,7 @@
             --text-primary: #ffffff;
             --text-secondary: #a8a8ba;
             --accent: #c49be8; /* Soft artsy violet */
-            --accent-dim: rgba(196, 155, 232, 0.25);
+            --accent-dim: rgba(196, 155, 232, 0.18);
             --nav-bg: rgba(8, 8, 11, 0.85);
             --border: #161622;
         }
@@ -35,7 +35,7 @@
             position: relative;
         }
 
-        /* Fixed Background Layer: Reduced gradient opacity to make the artwork significantly brighter */
+        /* Fixed Background Layer */
         body::before {
             content: "";
             position: fixed;
@@ -123,7 +123,7 @@
             padding-top: 140px; 
         }
 
-        /* Left side: Big, structural typography */
+        /* Left side typography */
         .brand-axis {
             text-align: right;
         }
@@ -140,7 +140,7 @@
             filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.95));
         }
 
-        /* Right side: The Statement Content */
+        /* Right side statement content */
         .statement-axis {
             border-left: 2px solid var(--accent);
             padding: 1.5rem 0 1.5rem 3rem;
@@ -152,7 +152,6 @@
             line-height: 1.8;
             font-style: italic;
             margin-bottom: 0.8rem;
-            /* Heavy contrast glow/shadow around text for maximum legibility on bright backgrounds */
             text-shadow: 0 2px 12px #000000, 0 0 4px #000000;
         }
 
@@ -166,13 +165,13 @@
             text-shadow: 0 2px 8px #000000;
         }
 
-        /* Grouped Layout Container */
+        /* CTA Container */
         .cta-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 1.2rem; 
+            gap: 1.5rem; 
             margin-bottom: auto; 
             padding-bottom: 2rem;
             width: 100%;
@@ -190,29 +189,49 @@
             text-shadow: 0 2px 12px #000000, 0 0 4px #000000;
         }
 
-        /* Striking Monolith Action Link */
+        /* Re-designed Monolith Action Link */
         .monolith-btn {
-            display: inline-block;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
             font-family: monospace;
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
+            letter-spacing: 3px;
+            font-weight: 400;
             color: #ffffff;
-            background: rgba(8, 8, 11, 0.85);
+            background: rgba(8, 8, 11, 0.45);
             text-decoration: none;
-            border: 1px solid var(--accent);
-            padding: 0.9rem 2.25rem; 
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9), 0 0 15px var(--accent-dim);
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            backdrop-filter: blur(8px);
+            border: 1px solid rgba(196, 155, 232, 0.4);
+            padding: 1rem 2.5rem; 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 4px 25px rgba(0, 0, 0, 0.7),
+                inset 0 0 15px rgba(196, 155, 232, 0.05);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .monolith-btn .arrow {
+            display: inline-block;
+            color: var(--accent);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .monolith-btn:hover {
-            background: var(--accent);
-            color: var(--bg-color);
-            box-shadow: 0 0 25px rgba(196, 155, 232, 0.6);
+            background: rgba(196, 155, 232, 0.12);
+            color: #ffffff;
+            border-color: var(--accent);
+            letter-spacing: 5px;
+            box-shadow: 
+                0 0 30px var(--accent-dim),
+                inset 0 0 20px rgba(196, 155, 232, 0.15);
             transform: translateY(-2px);
+        }
+
+        .monolith-btn:hover .arrow {
+            transform: translateX(4px);
         }
 
         /* Footer */
@@ -227,7 +246,7 @@
             text-shadow: 0 2px 8px #000000;
         }
 
-        /* Responsive collapse for tablets/phones */
+        /* Responsive collapse */
         @media (max-width: 768px) {
             body::before {
                 background-position: center center;
@@ -322,7 +341,7 @@
             When you gotta go, you gotta go
         </span>
         <a href="/monolith" class="monolith-btn">
-            → Enter Monolith
+            <span class="arrow">→</span> Enter Monolith
         </a>
     </div>
 
