@@ -3,798 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIPHER - Daily Movie Guessing Game</title>
+    <title>Cipher — Fragments & Echoes</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --accent-hover: #0284c7;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #22c55e;
-            --border: #334155;
+            --bg-color: #08080b;
+            --text-primary: #e4e4ed;
+            --text-secondary: #5a5a6e;
+            --accent: #a385b9;
+            --accent-dim: rgba(163, 133, 185, 0.15);
+            --nav-bg: rgba(8, 8, 11, 0.9);
+            --border: #161622;
+            --card-bg: rgba(18, 18, 26, 0.4);
+            --success: #10b981;
+            --error-red: #ef4444;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
+            color: var(--text-primary);
+            font-family: 'Georgia', serif;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
         }
 
-        .container {
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 650px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 2.5rem;
+            background: var(--nav-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
         }
 
-        header {
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
+        .nav-logo {
+            font-family: monospace;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-decoration: none;
+            opacity: 0.8;
+            flex-shrink: 0;
         }
 
-        header h1 {
-            letter-spacing: 6px;
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            font-weight: 900;
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
         }
 
-        .day-badge {
-            display: inline-block;
-            background: var(--border);
-            padding: 4px 12px;
-            border-radius: 12px;
+        .nav-links a {
+            font-family: monospace;
             font-size: 0.85rem;
-            margin-top: 5px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            white-space: nowrap;
         }
 
-        .clues-container {
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent-dim);
+        }
+
+        /* Main Game Layout */
+        main {
+            width: 100%;
+            max-width: 680px; 
+            padding-top: 110px; 
+            padding-bottom: 40px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 1.5rem;
         }
 
+        /* Prominent Header Below Nav Bar */
+        .page-header {
+            margin-bottom: 0.25rem;
+        }
+
+        .page-sublogo {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.95;
+            display: inline-block;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .game-title {
+            font-family: monospace;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* Clue Controls */
+        .clue-nav-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .clue-nav-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: monospace;
+            font-size: 0.8rem;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .clue-nav-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .clue-nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .clue-counter {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            min-width: 110px;
+            text-align: center;
+        }
+
+        /* Clue Card Area */
         .clue-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            transition: all 0.3s ease;
-        }
-
-        .clue-card.locked {
-            opacity: 0.4;
-            filter: blur(3px);
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .clue-card .clue-num {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-color);
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .input-section {
+            padding: 2.2rem 2rem;
+            border-radius: 4px;
+            min-height: 160px;
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 14px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            font-size: 1rem;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
-        }
-
-        button {
-            padding: 14px 20px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent-color);
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background: var(--accent-hover);
-            color: #fff;
-        }
-
-        button.skip-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        button.skip-btn:hover {
-            background: var(--border);
-            color: var(--text-main);
-        }
-
-        .status-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .status-box.active {
-            display: block;
-        }
-
-        .status-box.win {
-            border-color: var(--success);
-        }
-
-        .status-box h2 {
-            margin-bottom: 10px;
-        }
-
-        .btn-trailer {
-            margin-top: 15px;
-            background: var(--success);
-            color: #fff;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            z-index: 1000;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            transition: border-color 0.3s ease;
         }
 
-        .modal.active {
+        .clue-card:hover {
+            border-color: rgba(163, 133, 185, 0.4);
+        }
+
+        .clue-type-badge {
+            font-family: monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+        }
+
+        .clue-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #f0f0f5;
+            text-align: center;
+        }
+
+        /* Controls & Search */
+        .game-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .game-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text-primary);
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .game-input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Red Error Message Area */
+        .feedback-message {
+            font-family: monospace;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--error-red);
+            min-height: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            margin-top: -0.25rem;
+        }
+
+        .feedback-message.visible {
+            opacity: 1;
+        }
+
+        /* Dropdown Autocomplete */
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 280px;
+            overflow-y: auto;
+            background: var(--bg-color);
+            border: 1px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 50;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+
+        .dropdown-list.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--card-bg);
+        }
+
+        .dropdown-item.status-msg {
+            cursor: default;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .dropdown-poster {
+            width: 32px;
+            height: 48px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 2px;
+            background-color: #161622;
+            flex-shrink: 0;
+        }
+
+        .dropdown-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-title {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        .dropdown-meta {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-skip {
+            align-self: flex-start;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0;
+            font-size: 0.75rem;
+            font-family: monospace;
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: transparent;
+            transition: color 0.2s ease;
+            margin-top: 0.25rem;
+        }
+
+        .btn-skip:hover {
+            color: var(--accent);
+        }
+
+        /* End Game Status Display */
+        .status-display {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2.2rem 2rem;
+            border-radius: 6px;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .status-display.active {
             display: flex;
         }
 
-        .modal-content {
-            width: 90%;
-            max-width: 800px;
-            aspect-ratio: 16/9;
-            position: relative;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
+        .status-header-badge {
+            font-family: monospace;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            display: inline-block;
         }
 
-        .modal-content iframe {
+        .status-header-badge.win { 
+            color: var(--success); 
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-header-badge.fail { 
+            color: var(--accent); 
+            background: var(--accent-dim);
+            border: 1px solid var(--border);
+        }
+
+        .film-card-summary {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(8, 8, 11, 0.6);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            border-radius: 4px;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* Fixed Image Frame for Poster */
+        .film-poster-container {
+            width: 85px;
+            height: 128px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            background-color: #12121a;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .film-poster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .film-meta-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .film-title-text {
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        .film-subtext {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .solve-stats {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-top: 0.2rem;
+        }
+
+        .media-frame-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .media-iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .close-modal {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: #fff;
-            font-size: 2rem;
-            cursor: pointer;
+        footer {
+            margin-top: auto;
+            padding-top: 3rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: rgba(110, 110, 128, 0.3);
+            letter-spacing: 1.5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+            .nav-links { gap: 1.2rem; }
+            main { padding-top: 150px; }
+            .film-card-summary { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>CIPHER</h1>
-        <div class="day-badge" id="dayDisplay">DAY 1</div>
-    </header>
+    <nav>
+        <a href="/" class="nav-logo">// f&e</a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="quotes">Quotes</a></li>
+            <li><a href="poems">Poems</a></li>
+            <li><a href="cinema">Cinema</a></li>
+            <li><a href="cipher" class="active">Cipher</a></li>
+        </ul>
+    </nav>
 
-    <div class="clues-container" id="cluesContainer"></div>
+    <main>
+        <div class="page-header">
+            <span class="page-sublogo">// CIPHER</span>
+        </div>
 
-    <div class="input-section" id="controls">
-        <input type="text" id="guessInput" placeholder="Enter movie title..." autocomplete="off">
-        <button id="submitBtn">GUESS</button>
-        <button id="skipBtn" class="skip-btn">SKIP (+1 CLUE)</button>
-    </div>
+        <div class="game-header">
+            <span class="game-title">Guess The Film</span>
+            <div class="clue-nav-wrapper">
+                <button class="clue-nav-btn" id="prevClueBtn" title="Previous Clue">&lt;</button>
+                <span class="clue-counter" id="clueCounter">HINT 1 / 5</span>
+                <button class="clue-nav-btn" id="nextClueBtn" title="Next Unlocked Clue">&gt;</button>
+            </div>
+        </div>
 
-    <div class="status-box" id="statusBox">
-        <h2 id="statusTitle"></h2>
-        <p id="statusDesc"></p>
-        <button class="btn-trailer" id="trailerBtn" style="display:none;">WATCH TRAILER</button>
-    </div>
-</div>
+        <div class="clue-card">
+            <span class="clue-type-badge" id="clueTypeBadge">Initial Quote</span>
+            <div class="clue-text" id="clueText">Loading quote...</div>
+        </div>
 
-<div class="modal" id="trailerModal">
-    <div class="modal-content">
-        <span class="close-modal" id="closeModal">&times;</span>
-        <iframe id="youtubeIframe" src="" allowfullscreen></iframe>
-    </div>
-</div>
+        <div class="game-controls" id="gameControls">
+            <div class="search-input-wrapper">
+                <input type="text" id="gameInput" class="game-input" placeholder="Type film title to guess..." autocomplete="off">
+                <div class="dropdown-list" id="dropdownList"></div>
+            </div>
+            <div class="feedback-message" id="feedbackMessage"></div>
+            <button class="btn-skip" id="skipBtn">SKIP & UNLOCK HINT (+1 TRY)</button>
+        </div>
 
-<script>
-const MOVIE_STORE = [
-    // --- PREVIOUS ENTRIES ---
-    {
-        tmdbId: 1878, title: "Mulholland Drive", year: "2001", youtubeKey: "XnJ30Iaw1-w",
-        clues: [
-            "\"I open my eyes and I'm floating in space. I'm completely detached...\"",
-            "Clue 2: Released in the early 2000s; neo-noir psychological mystery.",
-            "\"It's time to wake up, Pretty Woman.\"",
-            "Clue 4: Directed by a master of surrealism whose initials are D.L.",
-            "\"There's a man back there behind this place. He's the one who's doing it.\"",
-            "\"Silencio... No hay banda... It is all an illusion.\"",
-            "\"This is the girl.\" — Starring Naomi Watts & Laura Harring."
-        ]
-    },
-    {
-        tmdbId: 70, title: "Network", year: "1976", youtubeKey: "1cS3O8P6T0U",
-        clues: [
-            "\"You have meddled with the primal forces of nature, Mr. Beale...\"",
-            "Clue 2: 1970s satirical drama exploring media and television sanity.",
-            "\"Television is not the truth! Television is a God-damned amusement park!\"",
-            "Clue 4: Written by Paddy Chayefsky, directed by Sidney Lumet.",
-            "\"The world is a business, Mr. Beale. It has been since man crawled out of the slime.\"",
-            "\"I'm going to blow my top off right here on live TV.\"",
-            "\"I'm as mad as hell, and I'm not going to take this anymore!\""
-        ]
-    },
-    {
-        tmdbId: 603, title: "The Matrix", year: "1999", youtubeKey: "vKQi3bBA1y8",
-        clues: [
-            "\"Welcome to the desert of the real.\"",
-            "Clue 2: Late 1990s sci-fi revolutionary action masterpiece.",
-            "\"Do you think that's air you're breathing now?\"",
-            "Clue 4: Directed by the Wachowskis; starring Keanu Reeves.",
-            "\"There is no spoon.\"",
-            "\"I know kung fu.\"",
-            "\"Unfortunately, no one can be told what the Matrix is. You have to see it for yourself.\""
-        ]
-    },
+        <div class="status-display" id="statusDisplay">
+            <div class="status-header-badge" id="statusBadge">ENTRY VERIFIED</div>
+            
+            <div class="film-card-summary">
+                <div class="film-poster-container">
+                    <img class="film-poster-img" id="filmPosterImg" src="" alt="Film Poster">
+                </div>
+                <div class="film-meta-details">
+                    <div class="film-title-text" id="filmTitleText">Mulholland Drive</div>
+                    <div class="film-subtext" id="filmDirectorText">2001 &bull; Dir. David Lynch</div>
+                    <div class="solve-stats" id="solveStatsText">Solved on Guess 1 of 5</div>
+                </div>
+            </div>
 
-    // --- NEW ADDITIONS FROM DIARY.CSV ---
-    {
-        tmdbId: 1359, title: "American Psycho", year: "2000", youtubeKey: "5YnGhW4UE9U",
-        clues: [
-            "\"I have all the characteristics of a human being... but not a single, clear emotion.\"",
-            "Clue 2: Year 2000 satirical psychological thriller focused on 1980s Wall Street vanity.",
-            "\"There is an idea of a Patrick Bateman, some kind of abstraction...\"",
-            "Clue 4: Directed by Mary Harron; features business cards and high-end skincare routines.",
-            "\"Feed me a stray cat.\"",
-            "\"Do you like Huey Lewis and the News?\"",
-            "\"I have to return some videotapes.\""
-        ]
-    },
-    {
-        tmdbId: 11104, title: "Chungking Express", year: "1994", youtubeKey: "BfZL5e9Ums8",
-        clues: [
-            "\"If memory could be canned, I hope it has no expiration date.\"",
-            "Clue 2: Mid-90s Hong Kong romantic crime drama split into two distinct stories.",
-            "\"We're all close to each other every day. We may not know each other, but we could become best friends...\"",
-            "Clue 4: Directed by Wong Kar-wai; heavily features California Dreamin'.",
-            "\"Where do you want to go? Wherever you want to take me.\"",
-            "\"Love has an expiration date, and mine is 10,000 years.\"",
-            "Starring Takeshi Kaneshiro, Brigitte Lin, Tony Leung, and Faye Wong."
-        ]
-    },
-    {
-        tmdbId: 7350, title: "Drive My Car", year: "2021", youtubeKey: "6BkB34q3K_s",
-        clues: [
-            "\"Those who survive keep thinking about the dead in one way or another.\"",
-            "Clue 2: 2021 Academy Award-winning Japanese drama centered around a red Saab 900.",
-            "\"We must keep on living, Uncle Vanya...\"",
-            "Clue 4: Directed by Ryusuke Hamaguchi based on a Haruki Murakami short story.",
-            "\"We can never completely understand another person, no matter how much we love them.\"",
-            "A theater director processes grief while rehearsing Chekhov's play in Hiroshima.",
-            "Starring Hidetoshi Nishijima and Touko Miura."
-        ]
-    },
-    {
-        tmdbId: 461, title: "First Reformed", year: "2017", youtubeKey: "hCFs22iOnE0",
-        clues: [
-            "\"Courage is the solution to despair, reason provides no answers.\"",
-            "Clue 2: 2017 quiet, intense psychological drama about faith, grief, and eco-terror.",
-            "\"Holding two opposing ideas in mind at the same time... that is the test.\"",
-            "Clue 4: Written and directed by Paul Schrader.",
-            "\"Can God forgive us for what we've done to His creation?\"",
-            "A solitary pastor undergoes a radical crisis of conscience in upstate New York.",
-            "Starring Ethan Hawke and Amanda Seyfried."
-        ]
-    },
-    {
-        tmdbId: 300668, title: "Licorice Pizza", year: "2021", youtubeKey: "ofnSdu11Rso",
-        clues: [
-            "\"I'm a showman. It's what I was born to do.\"",
-            "Clue 2: 2021 coming-of-age comedy set in the San Fernando Valley during 1973.",
-            "\"Don't forget me. Okay?\"",
-            "Clue 4: Written and directed by Paul Thomas Anderson.",
-            "\"I'm not going to forget you. Just like you're not going to forget me.\"",
-            "Waterbeds, pinball arcades, gas shortages, and Jon Peters driving a truck.",
-            "Starring Alana Haim and Cooper Hoffman."
-        ]
-    },
-    {
-        tmdbId: 301528, title: "Toy Story 4", year: "2019", youtubeKey: "wmiIUN-77PE",
-        clues: [
-            "\"I was made for soup, salad, maybe chili, and then the trash!\"",
-            "Clue 2: 2019 animated adventure about a newly crafted spork with existential dread.",
-            "\"I am not a toy. I'm trash!\"",
-            "Clue 4: Produced by Pixar Animation Studios.",
-            "\"He's not lost anymore. He's a free toy.\"",
-            "\"To infinity... and beyond!\"",
-            "Voice starring Tom Hanks, Tim Allen, and Annie Potts."
-        ]
-    },
-    {
-        tmdbId: 300671, title: "Annihilation", year: "2018", youtubeKey: "89OP78l9oF0",
-        clues: [
-            "\"It's not destroying. It's making something new.\"",
-            "Clue 2: 2018 sci-fi horror centered around an expanding iridescent anomaly called The Shimmer.",
-            "\"It was mutating everything. The plants, the animals, the DNA...\"",
-            "Clue 4: Directed by Alex Garland; based on the Southern Reach trilogy by Jeff VanderMeer.",
-            "\"Self-destruction is written into our code. It's in every cell.\"",
-            "A biologist leads an all-female expedition into an alienated ecological zone.",
-            "Starring Natalie Portman, Jennifer Jason Leigh, and Gina Rodriguez."
-        ]
-    },
-    {
-        tmdbId: 425663, title: "Midsommar", year: "2019", youtubeKey: "1Vnghdsjmd0",
-        clues: [
-            "\"Do you feel held by him? Does he feel like home to you?\"",
-            "Clue 2: 2019 daylight folk-horror set during a midsummer festival in rural Sweden.",
-            "\"It's a festival that happens only once every 90 years.\"",
-            "Clue 4: Written and directed by Ari Aster.",
-            "\"He's going to be the bear.\"",
-            "A grieving woman joins her distant boyfriend on a trip to a pagan commune.",
-            "Starring Florence Pugh and Jack Reynor."
-        ]
-    },
-    {
-        tmdbId: 399055, title: "The Shape of Water", year: "2017", youtubeKey: "XFYWazblaUA",
-        clues: [
-            "\"When he looks at me, he does not know how I am incomplete. He sees me as I am.\"",
-            "Clue 2: 2017 dark fantasy romance set during the Cold War in 1962 Baltimore.",
-            "\"If we do nothing, we are not human either.\"",
-            "Clue 4: Directed by Guillermo del Toro; winner of Best Picture.",
-            "\"You'll never know how much I loved you...\"",
-            "A mute cleaning woman forms a unique bond with a captured amphibious creature.",
-            "Starring Sally Hawkins, Michael Shannon, and Octavia Spencer."
-        ]
-    },
-    {
-        tmdbId: 335984, title: "Blade Runner 2049", year: "2017", youtubeKey: "gCcx85zbxz4",
-        clues: [
-            "\"All the best memories are hers.\"",
-            "Clue 2: 2017 neo-noir sci-fi sequel set in a dystopian future California.",
-            "\"To be born is to have a soul, I guess.\"",
-            "Clue 4: Directed by Denis Villeneuve; cinematography by Roger Deakins.",
-            "\"Cells interlinked within cells interlinked...\"",
-            "\"I know what's real.\"",
-            "\"Dying for the right cause is the most human thing we can do.\" — Starring Ryan Gosling & Harrison Ford."
-        ]
-    },
-    {
-        tmdbId: 496243, title: "Parasite", year: "2019", youtubeKey: "5xH0HfJHsaY",
-        clues: [
-            "\"You know what kind of plan never fails? No plan at all.\"",
-            "Clue 2: 2019 South Korean dark comedy thriller exploring class divide.",
-            "\"She's nice because she's rich. Rich, but still nice.\"",
-            "Clue 4: Directed by Bong Joon-ho; winner of 4 Academy Awards.",
-            "\"It's so metaphorical!\"",
-            "\"Respect!\"",
-            "A destitute family slowly infiltrates a wealthy household under false pretenses."
-        ]
-    },
-    {
-        tmdbId: 185, title: "A Clockwork Orange", year: "1971", youtubeKey: "gmm5S1g83S8",
-        clues: [
-            "\"It's funny how the colors of the real world only seem really real when you see them on the screen.\"",
-            "Clue 2: 1971 dystopian crime film exploring ultra-violence and behavioral conditioning.",
-            "\"I was cured all right!\"",
-            "Clue 4: Directed by Stanley Kubrick based on Anthony Burgess' novel.",
-            "\"Viddy well, little brother, viddy well.\"",
-            "Ludovico technique, Beethoven's Ninth, and milk bars.",
-            "Starring Malcolm McDowell as Alex DeLarge."
-        ]
-    },
-    {
-        tmdbId: 289, title: "Casablanca", year: "1942", youtubeKey: "BkL9l7qovsE",
-        clues: [
-            "\"Of all the gin joints in all the towns in all the world, she walks into mine.\"",
-            "Clue 2: 1942 classic wartime romantic drama set in Morocco.",
-            "\"Round up the usual suspects.\"",
-            "Clue 4: Directed by Michael Curtiz.",
-            "\"Play it once, Sam. For old times' sake.\"",
-            "\"We'll always have Paris.\"",
-            "\"Here's looking at you, kid.\" — Starring Humphrey Bogart & Ingrid Bergman."
-        ]
-    },
-    {
-        tmdbId: 238, title: "The Godfather", year: "1972", youtubeKey: "UaVTIH8mujA",
-        clues: [
-            "\"Revenge is a dish that tastes best when served cold.\"",
-            "Clue 2: 1972 monumental crime saga detailing the Corleone family.",
-            "\"A man who doesn't spend time with his family can never be a real man.\"",
-            "Clue 4: Directed by Francis Ford Coppola.",
-            "\"Leave the gun. Take the cannoli.\"",
-            "\"I'm gonna make him an offer he can't refuse.\"",
-            "Starring Marlon Brando, Al Pacino, and James Caan."
-        ]
-    },
-    {
-        tmdbId: 429, title: "The Good, the Bad and the Ugly", year: "1966", youtubeKey: "WCN5JJY_WiA",
-        clues: [
-            "\"You see, in this world there's two kinds of people, my friend: Those with loaded guns and those who dig.\"",
-            "Clue 2: 1966 Spaghetti Western epic scored by Ennio Morricone.",
-            "\"If you work for a living, why do you kill yourself working?\"",
-            "Clue 4: Directed by Sergio Leone.",
-            "\"When you have to shoot, shoot! Don't talk.\"",
-            "Three gunslingers search for buried Confederate gold amidst the Civil War.",
-            "Starring Clint Eastwood, Eli Wallach, and Lee Van Cleef."
-        ]
-    },
-    {
-        tmdbId: 105, title: "Back to the Future", year: "1985", youtubeKey: "qvsgGtivCgs",
-        clues: [
-            "\"If you're gonna build a time machine into a car, why not do it with some style?\"",
-            "Clue 2: 1985 sci-fi comedy adventure featuring a modified DeLorean.",
-            "\"Are you telling me you built a time machine... out of a DeLorean?\"",
-            "Clue 4: Directed by Robert Zemeckis.",
-            "\"1.21 gigawatts!\"",
-            "\"Great Scott!\"",
-            "\"Where we're going, we don't need roads.\" — Starring Michael J. Fox & Christopher Lloyd."
-        ]
-    },
-    {
-        tmdbId: 550, title: "Fight Club", year: "1999", youtubeKey: "qtRKDV93s2s",
-        clues: [
-            "\"It's only after we've lost everything that we're free to do anything.\"",
-            "Clue 2: Late '90s psychological thriller exploring commercialism and insomniac disassociation.",
-            "\"Advertising has us chasing cars and clothes, working jobs we hate so we can buy shit we don't need.\"",
-            "Clue 4: Directed by David Fincher; based on Chuck Palahniuk's novel.",
-            "\"His name is Robert Paulson.\"",
-            "\"The first rule of Fight Club is: You do not talk about Fight Club.\"",
-            "Starring Brad Pitt, Edward Norton, and Helena Bonham Carter."
-        ]
-    },
-    {
-        tmdbId: 120, title: "The Lord of the Rings: The Fellowship of the Ring", year: "2001", youtubeKey: "V75dMMIW2B4",
-        clues: [
-            "\"All we have to decide is what to do with the time that is given us.\"",
-            "Clue 2: 2001 high fantasy epic based on J.R.R. Tolkien's literature.",
-            "\"A wizard is never late, nor is he early. He arrives precisely when he means to.\"",
-            "Clue 4: Directed by Peter Jackson.",
-            "\"You shall not pass!\"",
-            "\"One does not simply walk into Mordor.\"",
-            "\"My precious...\" — Starring Elijah Wood, Ian McKellen, and Viggo Mortensen."
-        ]
-    },
-    {
-        tmdbId: 680, title: "Pulp Fiction", year: "1994", youtubeKey: "s7EdQ4FqbhY",
-        clues: [
-            "\"The path of the righteous man is beset on all sides by the iniquities of the selfish...\"",
-            "Clue 2: 1994 non-linear crime masterpiece filled with pop culture dialog.",
-            "\"They call it a Royale with Cheese.\"",
-            "Clue 4: Written and directed by Quentin Tarantino.",
-            "\"Say 'what' again. I dare you, I double dare you motherfucker!\"",
-            "\"Zed's dead, baby. Zed's dead.\"",
-            "Starring John Travolta, Samuel L. Jackson, and Uma Thurman."
-        ]
-    },
-    {
-        tmdbId: 13, title: "Forrest Gump", year: "1994", youtubeKey: "bLvqoHBptjg",
-        clues: [
-            "\"Stupid is as stupid does.\"",
-            "Clue 2: 1994 emotional drama spanning decades of American history through one man's eyes.",
-            "\"Run, Forrest, run!\"",
-            "Clue 4: Directed by Robert Zemeckis.",
-            "\"My mama always said life was like a box of chocolates...\"",
-            "\"You never know what you're gonna get.\"",
-            "Starring Tom Hanks and Robin Wright."
-        ]
-    },
-    {
-        tmdbId: 278, title: "The Shawshank Redemption", year: "1994", youtubeKey: "PLl99DlL6b4",
-        clues: [
-            "\"Fear can hold you prisoner. Hope can set you free.\"",
-            "Clue 2: 1994 prison drama exploring patience, friendship, and redemption.",
-            "\"These walls are funny. First you hate 'em, then you get used to 'em...\"",
-            "Clue 4: Directed by Frank Darabont; based on Stephen King's novella.",
-            "\"Andy Dufresne - who crawled through a river of shit and came out clean on the other side.\"",
-            "\"Get busy living, or get busy dying.\"",
-            "Starring Tim Robbins and Morgan Freeman."
-        ]
-    },
-    {
-        tmdbId: 240, title: "The Godfather Part II", year: "1974", youtubeKey: "qJr92K_hKl0",
-        clues: [
-            "\"Keep your friends close, but your enemies closer.\"",
-            "Clue 2: 1974 crime sequel detailing both Vito's rise and Michael's cold expansion.",
-            "\"I know it was you, Fredo. You broke my heart.\"",
-            "Clue 4: Directed by Francis Ford Coppola.",
-            "\"If history has taught us anything, it's that you can kill anyone.\"",
-            "Winner of 6 Academy Awards including Best Picture.",
-            "Starring Al Pacino, Robert De Niro, and Robert Duvall."
-        ]
-    },
-    {
-        tmdbId: 155, title: "The Dark Knight", year: "2008", youtubeKey: "EXeTwQWrcwY",
-        clues: [
-            "\"You either die a hero or you live long enough to see yourself become the villain.\"",
-            "Clue 2: 2008 superhero crime epic set in Gotham City.",
-            "\"Some men just want to watch the world burn.\"",
-            "Clue 4: Directed by Christopher Nolan.",
-            "\"Why so serious?\"",
-            "\"He's the hero Gotham deserves, but not the one it needs right now.\"",
-            "Starring Christian Bale and Heath Ledger."
-        ]
-    },
-    {
-        tmdbId: 122, title: "The Lord of the Rings: The Return of the King", year: "2003", youtubeKey: "r5X-hFf6Bwo",
-        clues: [
-            "\"I can't carry it for you, but I can carry you!\"",
-            "Clue 2: 2003 cinematic finale winning 11 Academy Awards.",
-            "\"For Frodo.\"",
-            "Clue 4: Directed by Peter Jackson.",
-            "\"My friends, you bow to no one.\"",
-            "\"I never thought it would end this way. End? No, the journey doesn't end here.\"",
-            "Starring Elijah Wood, Ian McKellen, and Viggo Mortensen."
-        ]
-    },
-    {
-        tmdbId: 597, title: "Titanic", year: "1997", youtubeKey: "zCy5QA9Sack",
-        clues: [
-            "\"I'll never let go, Jack. I'll never let go.\"",
-            "Clue 2: 1997 romantic disaster epic set aboard a doomed luxury ocean liner.",
-            "\"Draw me like one of your French girls...\"",
-            "Clue 4: Directed by James Cameron.",
-            "\"I'm the king of the world!\"",
-            "Winner of 11 Academy Awards.",
-            "Starring Leonardo DiCaprio and Kate Winslet."
-        ]
-    },
-    {
-        tmdbId: 6479, title: "I Am Legend", year: "2007", youtubeKey: "dtKMEAXyOjy",
-        clues: [
-            "\"My name is Robert Neville. I am a survivor living in New York City...\"",
-            "Clue 2: 2007 post-apocalyptic action thriller set in a deserted Manhattan.",
-            "\"God didn't do this. We did.\"",
-            "Clue 4: Directed by Francis Lawrence.",
-            "\"Please say hello to me...\"",
-            "A solitary scientist works on a cure for a nocturnal mutant virus alongside his dog Sam.",
-            "Starring Will Smith."
-        ]
-    },
-    {
-        tmdbId: 19995, title: "Avatar", year: "2009", youtubeKey: "5PSNL1qE6VY",
-        clues: [
-            "\"I see you.\"",
-            "Clue 2: 2009 sci-fi visual spectacle set on the lush alien moon Pandora.",
-            "\"Everything is backwards out there. This is the new world.\"",
-            "Clue 4: Directed by James Cameron.",
-            "\"You have a strong heart. No fear. But stupid!\"",
-            "A paraplegic Marine replaces his deceased brother on a corporate mission among the Na'vi.",
-            "Starring Sam Worthington and Zoe Saldana."
-        ]
-    },
-    {
-        tmdbId: 24428, title: "The Avengers", year: "2012", youtubeKey: "eOrNlm_o8mg",
-        clues: [
-            "\"There was an idea... to bring together a group of remarkable people...\"",
-            "Clue 2: 2012 superhero blockbuster uniting Earth's mightiest heroes against Loki.",
-            "\"We have a Hulk.\"",
-            "Clue 4: Directed by Joss Whedon.",
-            "\"That's my secret, Captain. I'm always angry.\"",
-            "\"Puny god.\"",
-            "Starring Robert Downey Jr., Chris Evans, Mark Ruffalo, and Scarlett Johansson."
-        ]
-    },
-    {
-        tmdbId: 299536, title: "Avengers: Infinity War", year: "2018", youtubeKey: "6ZfuNTqbHE8",
-        clues: [
-            "\"Dread it. Run from it. Destiny arrives all the same.\"",
-            "Clue 2: 2018 cosmic superhero ensemble centered around six Infinity Stones.",
-            "\"Should have gone for the head.\"",
-            "Clue 4: Directed by Anthony and Joe Russo.",
-            "\"Mr. Stark, I don't feel so good...\"",
-            "\"Perfectly balanced, as all things should be.\"",
-            "Starring Josh Brolin, Robert Downey Jr., and Chris Hemsworth."
-        ]
-    },
-    {
-        tmdbId: 299534, title: "Avengers: Endgame", year: "2019", youtubeKey: "TcMBFSGVi1c",
-        clues: [
-            "\"Part of the journey is the end.\"",
-            "Clue 2: 2019 blockbuster finale involving time travel to undo a cosmic snap.",
-            "\"I love you 3000.\"",
-            "Clue 4: Directed by Anthony and Joe Russo.",
-            "\"Avengers... assemble.\"",
-            "\"And I... am... Iron Man.\"",
-            "Starring Robert Downey Jr., Chris Evans, and Mark Ruffalo."
-        ]
-    },
-    {
-        tmdbId: 98, title: "Gladiator", year: "2000", youtubeKey: "P5ieIbInFSU",
-        clues: [
-            "\"What we do in life echoes in eternity.\"",
-            "Clue 2: 2000 historical epic following a betrayed Roman general forced into slavery.",
-            "\"Are you not entertained?! Are you not entertained?!\"",
-            "Clue 4: Directed by Ridley Scott; winner of 5 Academy Awards.",
-            "\"At my signal, unleash hell.\"",
-            "\"My name is Maximus Decimus Meridius...\"",
-            "Starring Russell Crowe and Joaquin Phoenix."
-        ]
-    },
-    {
-        tmdbId: 11, title: "Star Wars", year: "1977", youtubeKey: "vZ734NWnAHA",
-        clues: [
-            "\"Help me, Obi-Wan Kenobi. You're my only hope.\"",
-            "Clue 2: 1977 space opera that redefined blockbuster cinema.",
-            "\"The Force will be with you. Always.\"",
-            "Clue 4: Written and directed by George Lucas.",
-            "\"These aren't the droids you're looking for.\"",
-            "\"May the Force be with you.\"",
-            "Starring Mark Hamill, Harrison Ford, and Carrie Fisher."
-        ]
-    },
-    {
-        tmdbId: 1891, title: "The Empire Strikes Back", year: "1980", youtubeKey: "JNwNXF9Y6kY",
-        clues: [
-            "\"Do or do not. There is no try.\"",
-            "Clue 2: 1980 iconic sci-fi sequel featuring Cloud City and Hoth.",
-            "\"I love you. — I know.\"",
-            "Clue 4: Directed by Irvin Kershner.",
-            "\"Never tell me the odds!\"",
-            "\"No, I am your father.\"",
-            "Starring Mark Hamill, Harrison Ford, and Carrie Fisher."
-        ]
+            <div class="media-frame-wrapper" id="mediaWrapper">
+                <iframe class="media-iframe" id="mediaIframe" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        [ fragments & echoes // daily cipher ]
+    </footer>
+
+    <script>
+        const TMDB_API_KEY = "a2423ea9535bda58e2447a6a29d92cb6";
+
+        // Target Film & Clues
+        const targetMovie = { 
+            tmdbId: 490, // Explicit Mulholland Drive TMDB ID
+            title: "Mulholland Drive", 
+            year: "2001", 
+            director: "David Lynch",
+            leadActor: "Naomi Watts",
+            keyActorMovie: "The Ring (2002) & King Kong (2005)",
+            posterPath: "/oT182e0jvhZ6hNn9G4eE1E6gE2v.jpg", // Verified TMDB Poster Path
+            youtubeKey: "pv4S3iI7N6A"
+        };
+
+        const hintsList = [
+            { type: "Quote", text: "\"I opened my eyes and I was completely lost. Nothing makes sense, but every single scene is hypnotizing.\"" },
+            { type: "Hint 1 (Key Actor Movie)", text: `Key actor starred in: ${targetMovie.keyActorMovie}` },
+            { type: "Hint 2 (Lead Actor)", text: `Lead Actor: ${targetMovie.leadActor}` },
+            { type: "Hint 3 (Release Year)", text: `Release Year: ${targetMovie.year}` },
+            { type: "Hint 4 (Director)", text: `Director: ${targetMovie.director}` }
+        ];
+
+        let attemptsUsed = 0;
+        let unlockedClueIndex = 0;
+        let viewedClueIndex = 0;
+        let isGameOver = false;
+        let debounceTimer = null;
+
+        const clueCounter = document.getElementById('clueCounter');
+        const clueTypeBadge = document.getElementById('clueTypeBadge');
+        const clueText = document.getElementById('clueText');
+        const prevClueBtn = document.getElementById('prevClueBtn');
+        const nextClueBtn = document.getElementById('nextClueBtn');
+        const gameInput = document.getElementById('gameInput');
+        const dropdownList = document.getElementById('dropdownList');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const skipBtn = document.getElementById('skipBtn');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const statusBadge = document.getElementById('statusBadge');
+        const filmPosterImg = document.getElementById('filmPosterImg');
+        const filmTitleText = document.getElementById('filmTitleText');
+        const filmDirectorText = document.getElementById('filmDirectorText');
+        const solveStatsText = document.getElementById('solveStatsText');
+        const mediaIframe = document.getElementById('mediaIframe');
+
+        function updateClueDisplay() {
+            const currentClue = hintsList[viewedClueIndex];
+            clueCounter.textContent = `HINT ${viewedClueIndex + 1} / ${hintsList.length}`;
+            clueTypeBadge.textContent = currentClue.type;
+            clueText.textContent = currentClue.text;
+
+            prevClueBtn.disabled = viewedClueIndex === 0;
+            nextClueBtn.disabled = viewedClueIndex >= unlockedClueIndex;
+        }
+
+        async function fetchTMDBMovies(query) {
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=false`;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+                const data = await res.json();
+                return data.results || [];
+            } catch (err) {
+                console.error("TMDB API fetch error:", err);
+                return null;
+            }
+        }
+
+        function handleInput() {
+            clearTimeout(debounceTimer);
+            const query = gameInput.value.trim();
+            if (!query || query.length < 2) {
+                dropdownList.classList.remove('active');
+                return;
+            }
+
+            dropdownList.innerHTML = `<div class="dropdown-item status-msg">Searching cinema database...</div>`;
+            dropdownList.classList.add('active');
+
+            debounceTimer = setTimeout(async () => {
+                const movies = await fetchTMDBMovies(query);
+                if (movies === null) {
+                    dropdownList.innerHTML = `<div class="dropdown-item status-msg">Error fetching movies.</div>`;
+                } else if (movies.length === 0) {
+                    dropdownList.innerHTML = `<div class="dropdown-item status-msg">No matching films found.</div>`;
+                } else {
+                    renderDropdown(movies.slice(0, 5));
+                }
+            }, 300);
+        }
+
+        function renderDropdown(movies) {
+            dropdownList.innerHTML = '';
+            movies.forEach(movie => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                const posterUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : '';
+                const releaseYear = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
+
+                item.innerHTML = `
+                    <div class="dropdown-poster" style="${posterUrl ? `background-image: url('${posterUrl}')` : ''}"></div>
+                    <div class="dropdown-info">
+                        <span class="dropdown-title">${movie.title}</span>
+                        <span class="dropdown-meta">${releaseYear}</span>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    dropdownList.classList.remove('active');
+                    submitGuess(movie.title);
+                });
+                dropdownList.appendChild(item);
+            });
+            dropdownList.classList.add('active');
+        }
+
+        function normalizeStr(str) {
+            return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function submitGuess(selectedTitle) {
+            if (isGameOver) return;
+            attemptsUsed++;
+
+            if (normalizeStr(selectedTitle) === normalizeStr(targetMovie.title)) {
+                hideFeedback();
+                endGame(true);
+            } else {
+                gameInput.value = '';
+                if (attemptsUsed >= 5) {
+                    endGame(false);
+                } else {
+                    showFeedback(`"${selectedTitle}" is incorrect. Try ${attemptsUsed}/5 used.`);
+                    advanceClue();
+                }
+            }
+        }
+
+        function showFeedback(msg) {
+            feedbackMessage.textContent = msg;
+            feedbackMessage.classList.add('visible');
+        }
+
+        function hideFeedback() {
+            feedbackMessage.textContent = '';
+            feedbackMessage.classList.remove('visible');
+        }
+
+        function handleSkip() {
+            if (isGameOver) return;
+            attemptsUsed++;
+            gameInput.value = '';
+            hideFeedback();
+
+            if (attemptsUsed >= 5) {
+                endGame(false);
+            } else {
+                advanceClue();
+            }
+        }
+
+        function advanceClue() {
+            if (unlockedClueIndex < hintsList.length - 1) {
+                unlockedClueIndex++;
+                viewedClueIndex = unlockedClueIndex;
+                updateClueDisplay();
+            }
+        }
+
+        // Reliable Image Loader from TMDB
+        function loadTMDBPoster(posterPath) {
+            const tmdbUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => {
+                filmPosterImg.src = tmdbUrl;
+            };
+            img.onerror = () => {
+                // Fetch dynamic poster from TMDB API if explicit path fails
+                fetch(`https://api.themoviedb.org/3/movie/${targetMovie.tmdbId}?api_key=${TMDB_API_KEY}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.poster_path) {
+                            filmPosterImg.src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
+                        }
+                    })
+                    .catch(() => {
+                        filmPosterImg.alt = "Poster unavailable";
+                    });
+            };
+            img.src = tmdbUrl;
+        }
+
+        function endGame(won) {
+            isGameOver = true;
+            document.getElementById('gameControls').style.display = 'none';
+
+            // Unlock ALL clues so player can browse through them post-game
+            unlockedClueIndex = hintsList.length - 1;
+            updateClueDisplay();
+
+            statusDisplay.classList.add('active');
+            
+            filmTitleText.textContent = targetMovie.title;
+            filmDirectorText.textContent = `${targetMovie.year} \u2022 Dir. ${targetMovie.director}`;
+            
+           // Load TMDB Poster cleanly
+loadTMDBPoster(targetMovie.posterPath);
+
+if (won) {
+    statusBadge.className = 'status-header-badge win';
+    statusBadge.textContent = "ENTRY VERIFIED";
+
+    solveStatsText.textContent =
+        `Solved in ${attemptsUsed} ${attemptsUsed === 1 ? 'guess' : 'guesses'}!`;
+} else {
+    statusBadge.className = 'status-header-badge fail';
+    statusBadge.textContent = "ENTRY UNRESOLVED";
+
+    solveStatsText.textContent = "Out of guesses (5/5 used).";
+}
+
+// Load YouTube trailer
+if (targetMovie.youtubeKey) {
+    const videoId = String(targetMovie.youtubeKey).trim();
+
+    // Basic YouTube video ID validation
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+        mediaIframe.src =
+            `https://www.youtube-nocookie.com/embed/${videoId}` +
+            `?autoplay=1&playsinline=1&rel=0`;
+    } else {
+        console.error("Invalid YouTube video ID:", videoId);
+        mediaIframe.removeAttribute('src');
     }
-];
+} else {
+    console.warn("No YouTube trailer available for:", targetMovie);
+    mediaIframe.removeAttribute('src');
+}
 
-// DAY LOGIC
-const GAME_START_DAY = 1; 
-let currentDay = GAME_START_DAY;
-let currentMovie = MOVIE_STORE[(currentDay - 1) % MOVIE_STORE.length];
-let unlockedClues = 1;
-let gameOver = false;
 
-// DOM Elements
-const cluesContainer = document.getElementById('cluesContainer');
-const guessInput = document.getElementById('guessInput');
-const submitBtn = document.getElementById('submitBtn');
-const skipBtn = document.getElementById('skipBtn');
-const statusBox = document.getElementById('statusBox');
-const statusTitle = document.getElementById('statusTitle');
-const statusDesc = document.getElementById('statusDesc');
-const trailerBtn = document.getElementById('trailerBtn');
-const trailerModal = document.getElementById('trailerModal');
-const youtubeIframe = document.getElementById('youtubeIframe');
-const closeModal = document.getElementById('closeModal');
-const dayDisplay = document.getElementById('dayDisplay');
+window.addEventListener('DOMContentLoaded', () => {
+    updateClueDisplay();
 
-function initGame() {
-    dayDisplay.textContent = `DAY ${currentDay}`;
-    renderClues();
-    
-    submitBtn.addEventListener('click', handleGuess);
+    prevClueBtn.addEventListener('click', () => {
+        if (viewedClueIndex > 0) {
+            viewedClueIndex--;
+            updateClueDisplay();
+        }
+    });
+
+    nextClueBtn.addEventListener('click', () => {
+        if (viewedClueIndex < unlockedClueIndex) {
+            viewedClueIndex++;
+            updateClueDisplay();
+        }
+    });
+
+    gameInput.addEventListener('input', () => {
+        hideFeedback();
+        handleInput();
+    });
+
     skipBtn.addEventListener('click', handleSkip);
-    guessInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleGuess();
-    });
-    
-    trailerBtn.addEventListener('click', () => {
-        youtubeIframe.src = `https://www.youtube.com/embed/${currentMovie.youtubeKey}?autoplay=1`;
-        trailerModal.classList.add('active');
-    });
 
-    closeModal.addEventListener('click', () => {
-        trailerModal.classList.remove('active');
-        youtubeIframe.src = '';
-    });
-}
-
-function renderClues() {
-    cluesContainer.innerHTML = '';
-    currentMovie.clues.forEach((clueText, index) => {
-        const card = document.createElement('div');
-        card.className = `clue-card ${index >= unlockedClues ? 'locked' : ''}`;
-        card.innerHTML = `
-            <span class="clue-num">Clue ${index + 1} of ${currentMovie.clues.length}</span>
-            <div class="clue-text">${index < unlockedClues ? clueText : '••••••••••••••••••••••••••••••••••••'}</div>
-        `;
-        cluesContainer.appendChild(card);
-    });
-}
-
-function normalizeTitle(str) {
-    return str.toLowerCase().replace(/[^a-z0-9]/g, '');
-}
-
-function handleGuess() {
-    if (gameOver) return;
-    const userGuess = normalizeTitle(guessInput.value);
-    const targetTitle = normalizeTitle(currentMovie.title);
-
-    if (!userGuess) return;
-
-    if (userGuess === targetTitle) {
-        endGame(true);
-    } else {
-        guessInput.value = '';
-        guessInput.placeholder = "Incorrect! Try again or Skip...";
-        if (unlockedClues < currentMovie.clues.length) {
-            unlockedClues++;
-            renderClues();
-        } else {
-            endGame(false);
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-input-wrapper')) {
+            dropdownList.classList.remove('active');
         }
-    }
-}
-
-function handleSkip() {
-    if (gameOver) return;
-    if (unlockedClues < currentMovie.clues.length) {
-        unlockedClues++;
-        renderClues();
-        if (unlockedClues === currentMovie.clues.length) {
-            skipBtn.textContent = "GIVE UP";
-        }
-    } else {
-        endGame(false);
-    }
-}
-
-function endGame(won) {
-    gameOver = true;
-    document.getElementById('controls').style.display = 'none';
-    unlockedClues = currentMovie.clues.length;
-    renderClues();
-
-    statusBox.classList.add('active');
-    if (won) {
-        statusBox.classList.add('win');
-        statusTitle.textContent = "CIPHER SOLVED!";
-        statusDesc.textContent = `You correctly identified "${currentMovie.title}" (${currentMovie.year}) using ${unlockedClues} clues!`;
-    } else {
-        statusTitle.textContent = "CIPHER FAILED";
-        statusDesc.textContent = `The movie was "${currentMovie.title}" (${currentMovie.year}). Better luck tomorrow!`;
-    }
-
-    if (currentMovie.youtubeKey) {
-        trailerBtn.style.display = 'inline-block';
-    }
-}
-
-initGame();
-</script>
+    });
+});
+    </script>
 </body>
 </html>
