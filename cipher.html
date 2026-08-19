@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cipher — Fragments & Echoes</title>
+
     <style>
         :root {
             --bg-color: #08080b;
@@ -27,7 +28,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Georgia', serif;
+            font-family: Georgia, serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -37,7 +38,6 @@
             overflow-x: hidden;
         }
 
-        /* Navigation Bar */
         nav {
             position: fixed;
             top: 0;
@@ -81,23 +81,22 @@
             white-space: nowrap;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent);
             text-shadow: 0 0 8px var(--accent-dim);
         }
 
-        /* Main Game Layout */
         main {
             width: 100%;
-            max-width: 680px; 
-            padding-top: 110px; 
+            max-width: 680px;
+            padding-top: 110px;
             padding-bottom: 40px;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        /* Prominent Header Below Nav Bar */
         .page-header {
             margin-bottom: 0.25rem;
         }
@@ -119,6 +118,7 @@
             align-items: center;
             border-bottom: 1px solid var(--border);
             padding-bottom: 0.75rem;
+            gap: 1rem;
         }
 
         .game-title {
@@ -129,7 +129,6 @@
             color: var(--text-secondary);
         }
 
-        /* Clue Controls */
         .clue-nav-wrapper {
             display: flex;
             align-items: center;
@@ -171,7 +170,6 @@
             text-align: center;
         }
 
-        /* Clue Card Area */
         .clue-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -210,7 +208,6 @@
             text-align: center;
         }
 
-        /* Controls & Search */
         .game-controls {
             display: flex;
             flex-direction: column;
@@ -225,7 +222,7 @@
         .game-input {
             width: 100%;
             padding: 0.9rem 1.2rem;
-            font-family: 'Georgia', serif;
+            font-family: Georgia, serif;
             font-size: 1rem;
             font-style: italic;
             color: var(--text-primary);
@@ -240,7 +237,6 @@
             border-color: var(--accent);
         }
 
-        /* Red Error Message Area */
         .feedback-message {
             font-family: monospace;
             font-size: 0.8rem;
@@ -256,7 +252,6 @@
             opacity: 1;
         }
 
-        /* Dropdown Autocomplete */
         .dropdown-list {
             position: absolute;
             top: 100%;
@@ -270,7 +265,7 @@
             border-radius: 0 0 4px 4px;
             z-index: 50;
             display: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
         }
 
         .dropdown-list.active {
@@ -287,8 +282,10 @@
             transition: background 0.2s ease;
         }
 
-        .dropdown-item:hover {
+        .dropdown-item:hover,
+        .dropdown-item:focus {
             background: var(--card-bg);
+            outline: none;
         }
 
         .dropdown-item.status-msg {
@@ -313,12 +310,16 @@
         .dropdown-info {
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
 
         .dropdown-title {
             font-size: 0.95rem;
             font-style: italic;
             color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .dropdown-meta {
@@ -345,7 +346,6 @@
             color: var(--accent);
         }
 
-        /* End Game Status Display */
         .status-display {
             display: none;
             background: var(--card-bg);
@@ -356,7 +356,7 @@
             gap: 1.5rem;
             text-align: center;
             align-items: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         .status-display.active {
@@ -373,14 +373,14 @@
             display: inline-block;
         }
 
-        .status-header-badge.win { 
-            color: var(--success); 
+        .status-header-badge.win {
+            color: var(--success);
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        .status-header-badge.fail { 
-            color: var(--accent); 
+        .status-header-badge.fail {
+            color: var(--accent);
             background: var(--accent-dim);
             border: 1px solid var(--border);
         }
@@ -397,7 +397,6 @@
             text-align: left;
         }
 
-        /* Fixed Image Frame for Poster */
         .film-poster-container {
             width: 85px;
             height: 128px;
@@ -422,6 +421,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
+            min-width: 0;
         }
 
         .film-title-text {
@@ -470,17 +470,47 @@
         }
 
         @media (max-width: 600px) {
-            nav { padding: 1.5rem; flex-direction: column; gap: 1rem; }
-            .nav-links { gap: 1.2rem; }
-            main { padding-top: 150px; }
-            .film-card-summary { flex-direction: column; text-align: center; }
+            body {
+                padding: 1rem;
+            }
+
+            nav {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            main {
+                padding-top: 155px;
+            }
+
+            .game-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .film-card-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .film-meta-details {
+                align-items: center;
+            }
         }
     </style>
 </head>
-<body>
 
+<body>
     <nav>
-        <a href="/" class="nav-logo">// f&e</a>
+        <a href="/" class="nav-logo">// f&amp;e</a>
+
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="quotes">Quotes</a></li>
@@ -497,10 +527,25 @@
 
         <div class="game-header">
             <span class="game-title">Guess The Film</span>
+
             <div class="clue-nav-wrapper">
-                <button class="clue-nav-btn" id="prevClueBtn" title="Previous Clue">&lt;</button>
+                <button
+                    type="button"
+                    class="clue-nav-btn"
+                    id="prevClueBtn"
+                    title="Previous Clue"
+                    aria-label="Previous clue"
+                >&lt;</button>
+
                 <span class="clue-counter" id="clueCounter">HINT 1 / 5</span>
-                <button class="clue-nav-btn" id="nextClueBtn" title="Next Unlocked Clue">&gt;</button>
+
+                <button
+                    type="button"
+                    class="clue-nav-btn"
+                    id="nextClueBtn"
+                    title="Next Unlocked Clue"
+                    aria-label="Next clue"
+                >&gt;</button>
             </div>
         </div>
 
@@ -511,309 +556,576 @@
 
         <div class="game-controls" id="gameControls">
             <div class="search-input-wrapper">
-                <input type="text" id="gameInput" class="game-input" placeholder="Type film title to guess..." autocomplete="off">
-                <div class="dropdown-list" id="dropdownList"></div>
+                <input
+                    type="text"
+                    id="gameInput"
+                    class="game-input"
+                    placeholder="Type film title to guess..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="Film title guess"
+                    aria-autocomplete="list"
+                    aria-controls="dropdownList"
+                >
+
+                <div class="dropdown-list" id="dropdownList" role="listbox"></div>
             </div>
-            <div class="feedback-message" id="feedbackMessage"></div>
-            <button class="btn-skip" id="skipBtn">SKIP & UNLOCK HINT (+1 TRY)</button>
+
+            <div
+                class="feedback-message"
+                id="feedbackMessage"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+            <button type="button" class="btn-skip" id="skipBtn">
+                SKIP &amp; UNLOCK HINT (+1 TRY)
+            </button>
         </div>
 
         <div class="status-display" id="statusDisplay">
             <div class="status-header-badge" id="statusBadge">ENTRY VERIFIED</div>
-            
+
             <div class="film-card-summary">
                 <div class="film-poster-container">
-                    <img class="film-poster-img" id="filmPosterImg" src="" alt="Film Poster">
+                    <img
+                        class="film-poster-img"
+                        id="filmPosterImg"
+                        src=""
+                        alt="Film poster"
+                        loading="lazy"
+                    >
                 </div>
+
                 <div class="film-meta-details">
                     <div class="film-title-text" id="filmTitleText">Mulholland Drive</div>
-                    <div class="film-subtext" id="filmDirectorText">2001 &bull; Dir. David Lynch</div>
-                    <div class="solve-stats" id="solveStatsText">Solved on Guess 1 of 5</div>
+                    <div class="film-subtext" id="filmDirectorText">
+                        2001 • Dir. David Lynch
+                    </div>
+                    <div class="solve-stats" id="solveStatsText">
+                        Solved on Guess 1 of 5
+                    </div>
                 </div>
             </div>
 
             <div class="media-frame-wrapper" id="mediaWrapper">
-                <iframe class="media-iframe" id="mediaIframe" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe
+                    class="media-iframe"
+                    id="mediaIframe"
+                    title="Film trailer"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                ></iframe>
             </div>
         </div>
     </main>
 
     <footer>
-        [ fragments & echoes // daily cipher ]
+        [ fragments &amp; echoes // daily cipher ]
     </footer>
 
     <script>
-        const TMDB_API_KEY = "a2423ea9535bda58e2447a6a29d92cb6";
+        "use strict";
 
-        // Target Film & Clues
-        const targetMovie = { 
-            tmdbId: 490, // Explicit Mulholland Drive TMDB ID
-            title: "Mulholland Drive", 
-            year: "2001", 
+        /*
+         * NOTE:
+         * The TMDB API key was present in the original client-side file.
+         * Any key embedded in frontend JavaScript is visible to visitors.
+         * Restrict the key in TMDB's dashboard or move API requests to a backend
+         * if this site is public.
+         */
+
+        const TMDB_API_KEY = "a2423ea9535bda58e2447a6a29d92cb6";
+        const MAX_ATTEMPTS = 5;
+
+        const targetMovie = {
+            tmdbId: 490,
+            title: "Mulholland Drive",
+            year: "2001",
             director: "David Lynch",
             leadActor: "Naomi Watts",
             keyActorMovie: "The Ring (2002) & King Kong (2005)",
-            posterPath: "/oT182e0jvhZ6hNn9G4eE1E6gE2v.jpg", // Verified TMDB Poster Path
+            posterPath: "/oT182e0jvhZ6hNn9G4eE1E6gE2v.jpg",
             youtubeKey: "pv4S3iI7N6A"
         };
 
         const hintsList = [
-            { type: "Quote", text: "\"I opened my eyes and I was completely lost. Nothing makes sense, but every single scene is hypnotizing.\"" },
-            { type: "Hint 1 (Key Actor Movie)", text: `Key actor starred in: ${targetMovie.keyActorMovie}` },
-            { type: "Hint 2 (Lead Actor)", text: `Lead Actor: ${targetMovie.leadActor}` },
-            { type: "Hint 3 (Release Year)", text: `Release Year: ${targetMovie.year}` },
-            { type: "Hint 4 (Director)", text: `Director: ${targetMovie.director}` }
+            {
+                type: "Quote",
+                text: "\"I opened my eyes and I was completely lost. Nothing makes sense, but every single scene is hypnotizing.\""
+            },
+            {
+                type: "Hint 1 (Key Actor Movie)",
+                text: `Key actor starred in: ${targetMovie.keyActorMovie}`
+            },
+            {
+                type: "Hint 2 (Lead Actor)",
+                text: `Lead Actor: ${targetMovie.leadActor}`
+            },
+            {
+                type: "Hint 3 (Release Year)",
+                text: `Release Year: ${targetMovie.year}`
+            },
+            {
+                type: "Hint 4 (Director)",
+                text: `Director: ${targetMovie.director}`
+            }
         ];
 
         let attemptsUsed = 0;
         let unlockedClueIndex = 0;
         let viewedClueIndex = 0;
-        let isGameOver = false;
         let debounceTimer = null;
+        let searchRequestId = 0;
+        let isGameOver = false;
 
-        const clueCounter = document.getElementById('clueCounter');
-        const clueTypeBadge = document.getElementById('clueTypeBadge');
-        const clueText = document.getElementById('clueText');
-        const prevClueBtn = document.getElementById('prevClueBtn');
-        const nextClueBtn = document.getElementById('nextClueBtn');
-        const gameInput = document.getElementById('gameInput');
-        const dropdownList = document.getElementById('dropdownList');
-        const feedbackMessage = document.getElementById('feedbackMessage');
-        const skipBtn = document.getElementById('skipBtn');
-        const statusDisplay = document.getElementById('statusDisplay');
-        const statusBadge = document.getElementById('statusBadge');
-        const filmPosterImg = document.getElementById('filmPosterImg');
-        const filmTitleText = document.getElementById('filmTitleText');
-        const filmDirectorText = document.getElementById('filmDirectorText');
-        const solveStatsText = document.getElementById('solveStatsText');
-        const mediaIframe = document.getElementById('mediaIframe');
+        const clueCounter = document.getElementById("clueCounter");
+        const clueTypeBadge = document.getElementById("clueTypeBadge");
+        const clueText = document.getElementById("clueText");
+        const prevClueBtn = document.getElementById("prevClueBtn");
+        const nextClueBtn = document.getElementById("nextClueBtn");
+        const gameInput = document.getElementById("gameInput");
+        const dropdownList = document.getElementById("dropdownList");
+        const feedbackMessage = document.getElementById("feedbackMessage");
+        const skipBtn = document.getElementById("skipBtn");
+        const gameControls = document.getElementById("gameControls");
+        const statusDisplay = document.getElementById("statusDisplay");
+        const statusBadge = document.getElementById("statusBadge");
+        const filmPosterImg = document.getElementById("filmPosterImg");
+        const filmTitleText = document.getElementById("filmTitleText");
+        const filmDirectorText = document.getElementById("filmDirectorText");
+        const solveStatsText = document.getElementById("solveStatsText");
+        const mediaIframe = document.getElementById("mediaIframe");
 
         function updateClueDisplay() {
             const currentClue = hintsList[viewedClueIndex];
-            clueCounter.textContent = `HINT ${viewedClueIndex + 1} / ${hintsList.length}`;
+
+            if (!currentClue) {
+                return;
+            }
+
+            clueCounter.textContent =
+                `HINT ${viewedClueIndex + 1} / ${hintsList.length}`;
+
             clueTypeBadge.textContent = currentClue.type;
             clueText.textContent = currentClue.text;
 
             prevClueBtn.disabled = viewedClueIndex === 0;
-            nextClueBtn.disabled = viewedClueIndex >= unlockedClueIndex;
+            nextClueBtn.disabled =
+                viewedClueIndex >= unlockedClueIndex;
         }
 
-        async function fetchTMDBMovies(query) {
-            const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=false`;
-            try {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-                const data = await res.json();
-                return data.results || [];
-            } catch (err) {
-                console.error("TMDB API fetch error:", err);
+        async function fetchTMDBMovies(query, requestId) {
+            if (!TMDB_API_KEY) {
+                throw new Error("TMDB API key is missing.");
+            }
+
+            const params = new URLSearchParams({
+                api_key: TMDB_API_KEY,
+                query,
+                include_adult: "false",
+                language: "en-US"
+            });
+
+            const url =
+                `https://api.themoviedb.org/3/search/movie?${params.toString()}`;
+
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (requestId !== searchRequestId) {
                 return null;
             }
+
+            if (!response.ok) {
+                throw new Error(`TMDB request failed (${response.status}).`);
+            }
+
+            const data = await response.json();
+            return Array.isArray(data.results) ? data.results : [];
+        }
+
+        function clearDropdown() {
+            dropdownList.innerHTML = "";
+            dropdownList.classList.remove("active");
+        }
+
+        function showDropdownMessage(message) {
+            dropdownList.textContent = "";
+
+            const messageElement = document.createElement("div");
+            messageElement.className = "dropdown-item status-msg";
+            messageElement.textContent = message;
+
+            dropdownList.appendChild(messageElement);
+            dropdownList.classList.add("active");
+        }
+
+        function createDropdownItem(movie) {
+            const item = document.createElement("div");
+
+            item.className = "dropdown-item";
+            item.setAttribute("role", "option");
+            item.tabIndex = 0;
+
+            const poster = document.createElement("div");
+            poster.className = "dropdown-poster";
+
+            if (movie.poster_path) {
+                poster.style.backgroundImage =
+                    `url("https://image.tmdb.org/t/p/w92${movie.poster_path}")`;
+            }
+
+            const info = document.createElement("div");
+            info.className = "dropdown-info";
+
+            const title = document.createElement("span");
+            title.className = "dropdown-title";
+            title.textContent = movie.title || "Untitled";
+
+            const meta = document.createElement("span");
+            meta.className = "dropdown-meta";
+            meta.textContent =
+                movie.release_date
+                    ? movie.release_date.substring(0, 4)
+                    : "N/A";
+
+            info.append(title, meta);
+            item.append(poster, info);
+
+            const selectMovie = () => {
+                clearDropdown();
+                submitGuess(movie.title || "");
+            };
+
+            item.addEventListener("click", selectMovie);
+
+            item.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    selectMovie();
+                }
+            });
+
+            return item;
+        }
+
+        function renderDropdown(movies) {
+            dropdownList.replaceChildren();
+
+            movies.slice(0, 5).forEach((movie) => {
+                dropdownList.appendChild(createDropdownItem(movie));
+            });
+
+            dropdownList.classList.toggle("active", movies.length > 0);
         }
 
         function handleInput() {
             clearTimeout(debounceTimer);
+
             const query = gameInput.value.trim();
-            if (!query || query.length < 2) {
-                dropdownList.classList.remove('active');
+            const requestId = ++searchRequestId;
+
+            hideFeedback();
+
+            if (isGameOver || query.length < 2) {
+                clearDropdown();
                 return;
             }
 
-            dropdownList.innerHTML = `<div class="dropdown-item status-msg">Searching cinema database...</div>`;
-            dropdownList.classList.add('active');
+            showDropdownMessage("Searching cinema database...");
 
             debounceTimer = setTimeout(async () => {
-                const movies = await fetchTMDBMovies(query);
-                if (movies === null) {
-                    dropdownList.innerHTML = `<div class="dropdown-item status-msg">Error fetching movies.</div>`;
-                } else if (movies.length === 0) {
-                    dropdownList.innerHTML = `<div class="dropdown-item status-msg">No matching films found.</div>`;
-                } else {
-                    renderDropdown(movies.slice(0, 5));
+                try {
+                    const movies = await fetchTMDBMovies(query, requestId);
+
+                    if (movies === null || requestId !== searchRequestId) {
+                        return;
+                    }
+
+                    if (movies.length === 0) {
+                        showDropdownMessage("No matching films found.");
+                        return;
+                    }
+
+                    renderDropdown(movies);
+                } catch (error) {
+                    if (requestId !== searchRequestId) {
+                        return;
+                    }
+
+                    console.error("TMDB API error:", error);
+                    showDropdownMessage(
+                        "Could not reach the cinema database."
+                    );
                 }
             }, 300);
         }
 
-        function renderDropdown(movies) {
-            dropdownList.innerHTML = '';
-            movies.forEach(movie => {
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-                const posterUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : '';
-                const releaseYear = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
-
-                item.innerHTML = `
-                    <div class="dropdown-poster" style="${posterUrl ? `background-image: url('${posterUrl}')` : ''}"></div>
-                    <div class="dropdown-info">
-                        <span class="dropdown-title">${movie.title}</span>
-                        <span class="dropdown-meta">${releaseYear}</span>
-                    </div>
-                `;
-                
-                item.addEventListener('click', () => {
-                    dropdownList.classList.remove('active');
-                    submitGuess(movie.title);
-                });
-                dropdownList.appendChild(item);
-            });
-            dropdownList.classList.add('active');
-        }
-
-        function normalizeStr(str) {
-            return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        function normalizeStr(value) {
+            return String(value)
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]/g, "");
         }
 
         function submitGuess(selectedTitle) {
-            if (isGameOver) return;
-            attemptsUsed++;
+            if (isGameOver || !selectedTitle) {
+                return;
+            }
 
-            if (normalizeStr(selectedTitle) === normalizeStr(targetMovie.title)) {
+            attemptsUsed++;
+            clearDropdown();
+            gameInput.value = "";
+
+            const isCorrect =
+                normalizeStr(selectedTitle) ===
+                normalizeStr(targetMovie.title);
+
+            if (isCorrect) {
                 hideFeedback();
                 endGame(true);
-            } else {
-                gameInput.value = '';
-                if (attemptsUsed >= 5) {
-                    endGame(false);
-                } else {
-                    showFeedback(`"${selectedTitle}" is incorrect. Try ${attemptsUsed}/5 used.`);
-                    advanceClue();
-                }
+                return;
             }
+
+            if (attemptsUsed >= MAX_ATTEMPTS) {
+                endGame(false);
+                return;
+            }
+
+            showFeedback(
+                `"${selectedTitle}" is incorrect. ` +
+                `Try ${attemptsUsed}/${MAX_ATTEMPTS} used.`
+            );
+
+            advanceClue();
         }
 
-        function showFeedback(msg) {
-            feedbackMessage.textContent = msg;
-            feedbackMessage.classList.add('visible');
+        function showFeedback(message) {
+            feedbackMessage.textContent = message;
+            feedbackMessage.classList.add("visible");
         }
 
         function hideFeedback() {
-            feedbackMessage.textContent = '';
-            feedbackMessage.classList.remove('visible');
+            feedbackMessage.textContent = "";
+            feedbackMessage.classList.remove("visible");
         }
 
         function handleSkip() {
-            if (isGameOver) return;
+            if (isGameOver) {
+                return;
+            }
+
             attemptsUsed++;
-            gameInput.value = '';
+            gameInput.value = "";
+            clearDropdown();
             hideFeedback();
 
-            if (attemptsUsed >= 5) {
+            if (attemptsUsed >= MAX_ATTEMPTS) {
                 endGame(false);
-            } else {
-                advanceClue();
+                return;
             }
+
+            advanceClue();
         }
 
         function advanceClue() {
-            if (unlockedClueIndex < hintsList.length - 1) {
-                unlockedClueIndex++;
-                viewedClueIndex = unlockedClueIndex;
-                updateClueDisplay();
+            if (unlockedClueIndex >= hintsList.length - 1) {
+                return;
             }
+
+            unlockedClueIndex++;
+            viewedClueIndex = unlockedClueIndex;
+            updateClueDisplay();
         }
 
-        // Reliable Image Loader from TMDB
-        function loadTMDBPoster(posterPath) {
-            const tmdbUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => {
-                filmPosterImg.src = tmdbUrl;
+        function loadTMDBPoster() {
+            const fallbackPath = targetMovie.posterPath;
+
+            const setPoster = (posterPath) => {
+                if (!posterPath) {
+                    filmPosterImg.removeAttribute("src");
+                    filmPosterImg.alt = "Poster unavailable";
+                    return;
+                }
+
+                filmPosterImg.src =
+                    `https://image.tmdb.org/t/p/w500${posterPath}`;
+                filmPosterImg.alt = `${targetMovie.title} poster`;
             };
-            img.onerror = () => {
-                // Fetch dynamic poster from TMDB API if explicit path fails
-                fetch(`https://api.themoviedb.org/3/movie/${targetMovie.tmdbId}?api_key=${TMDB_API_KEY}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.poster_path) {
-                            filmPosterImg.src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-                        }
-                    })
-                    .catch(() => {
+
+            if (fallbackPath) {
+                setPoster(fallbackPath);
+            }
+
+            if (!TMDB_API_KEY || !targetMovie.tmdbId) {
+                return;
+            }
+
+            const params = new URLSearchParams({
+                api_key: TMDB_API_KEY,
+                language: "en-US"
+            });
+
+            fetch(
+                `https://api.themoviedb.org/3/movie/${targetMovie.tmdbId}?${params.toString()}`,
+                {
+                    headers: {
+                        Accept: "application/json"
+                    }
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`TMDB poster request failed (${response.status}).`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.poster_path) {
+                        setPoster(data.poster_path);
+                    }
+                })
+                .catch((error) => {
+                    console.warn("Could not refresh poster from TMDB:", error);
+
+                    if (!fallbackPath) {
+                        filmPosterImg.removeAttribute("src");
                         filmPosterImg.alt = "Poster unavailable";
-                    });
-            };
-            img.src = tmdbUrl;
+                    }
+                });
+        }
+
+        function loadYouTubeTrailer() {
+            const videoId = String(targetMovie.youtubeKey || "").trim();
+
+            mediaIframe.removeAttribute("src");
+
+            if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+                console.warn("Invalid YouTube video ID:", videoId);
+                return;
+            }
+
+            const params = new URLSearchParams({
+                autoplay: "1",
+                playsinline: "1",
+                rel: "0"
+            });
+
+            mediaIframe.src =
+                `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
         }
 
         function endGame(won) {
+            if (isGameOver) {
+                return;
+            }
+
             isGameOver = true;
-            document.getElementById('gameControls').style.display = 'none';
 
-            // Unlock ALL clues so player can browse through them post-game
+            clearTimeout(debounceTimer);
+            searchRequestId++;
+            clearDropdown();
+            gameControls.style.display = "none";
+
+            // After the game ends, allow the player to browse all clues.
             unlockedClueIndex = hintsList.length - 1;
+            viewedClueIndex = Math.max(
+                0,
+                Math.min(viewedClueIndex, unlockedClueIndex)
+            );
             updateClueDisplay();
 
-            statusDisplay.classList.add('active');
-            
+            statusDisplay.classList.add("active");
+
             filmTitleText.textContent = targetMovie.title;
-            filmDirectorText.textContent = `${targetMovie.year} \u2022 Dir. ${targetMovie.director}`;
-            
-           // Load TMDB Poster cleanly
-loadTMDBPoster(targetMovie.posterPath);
+            filmDirectorText.textContent =
+                `${targetMovie.year} • Dir. ${targetMovie.director}`;
 
-if (won) {
-    statusBadge.className = 'status-header-badge win';
-    statusBadge.textContent = "ENTRY VERIFIED";
+            loadTMDBPoster();
 
-    solveStatsText.textContent =
-        `Solved in ${attemptsUsed} ${attemptsUsed === 1 ? 'guess' : 'guesses'}!`;
-} else {
-    statusBadge.className = 'status-header-badge fail';
-    statusBadge.textContent = "ENTRY UNRESOLVED";
+            if (won) {
+                statusBadge.className = "status-header-badge win";
+                statusBadge.textContent = "ENTRY VERIFIED";
 
-    solveStatsText.textContent = "Out of guesses (5/5 used).";
-}
+                solveStatsText.textContent =
+                    `Solved in ${attemptsUsed} ` +
+                    `${attemptsUsed === 1 ? "guess" : "guesses"}!`;
+            } else {
+                statusBadge.className = "status-header-badge fail";
+                statusBadge.textContent = "ENTRY UNRESOLVED";
 
-// Load YouTube trailer
-if (targetMovie.youtubeKey) {
-    const videoId = String(targetMovie.youtubeKey).trim();
+                solveStatsText.textContent =
+                    `Out of guesses (${attemptsUsed}/${MAX_ATTEMPTS} used).`;
+            }
 
-    // Basic YouTube video ID validation
-    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
-        mediaIframe.src =
-            `https://www.youtube-nocookie.com/embed/${videoId}` +
-            `?autoplay=1&playsinline=1&rel=0`;
-    } else {
-        console.error("Invalid YouTube video ID:", videoId);
-        mediaIframe.removeAttribute('src');
-    }
-} else {
-    console.warn("No YouTube trailer available for:", targetMovie);
-    mediaIframe.removeAttribute('src');
-}
+            loadYouTubeTrailer();
+        }
 
-
-window.addEventListener('DOMContentLoaded', () => {
-    updateClueDisplay();
-
-    prevClueBtn.addEventListener('click', () => {
-        if (viewedClueIndex > 0) {
-            viewedClueIndex--;
+        function initializeGame() {
             updateClueDisplay();
+
+            prevClueBtn.addEventListener("click", () => {
+                if (viewedClueIndex > 0) {
+                    viewedClueIndex--;
+                    updateClueDisplay();
+                }
+            });
+
+            nextClueBtn.addEventListener("click", () => {
+                if (viewedClueIndex < unlockedClueIndex) {
+                    viewedClueIndex++;
+                    updateClueDisplay();
+                }
+            });
+
+            gameInput.addEventListener("input", handleInput);
+
+            gameInput.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    clearDropdown();
+                    return;
+                }
+
+                /*
+                 * The actual guess should be selected from the TMDB dropdown.
+                 * Enter therefore does not submit an arbitrary string.
+                 */
+                if (event.key === "Enter") {
+                    event.preventDefault();
+
+                    const firstItem =
+                        dropdownList.querySelector(".dropdown-item:not(.status-msg)");
+
+                    if (firstItem) {
+                        firstItem.click();
+                    }
+                }
+            });
+
+            skipBtn.addEventListener("click", handleSkip);
+
+            document.addEventListener("click", (event) => {
+                if (!event.target.closest(".search-input-wrapper")) {
+                    clearDropdown();
+                }
+            });
+
+            // Don't leave an empty iframe consuming resources before game end.
+            mediaIframe.removeAttribute("src");
         }
-    });
 
-    nextClueBtn.addEventListener('click', () => {
-        if (viewedClueIndex < unlockedClueIndex) {
-            viewedClueIndex++;
-            updateClueDisplay();
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initializeGame);
+        } else {
+            initializeGame();
         }
-    });
-
-    gameInput.addEventListener('input', () => {
-        hideFeedback();
-        handleInput();
-    });
-
-    skipBtn.addEventListener('click', handleSkip);
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-input-wrapper')) {
-            dropdownList.classList.remove('active');
-        }
-    });
-});
     </script>
 </body>
 </html>
