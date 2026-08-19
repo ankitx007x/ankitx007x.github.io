@@ -32,7 +32,6 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
             padding: 2rem;
             overflow-x: hidden;
@@ -61,7 +60,6 @@
             color: var(--text-primary);
             text-decoration: none;
             opacity: 0.8;
-            flex-shrink: 0;
         }
 
         .nav-links {
@@ -98,7 +96,10 @@
         }
 
         .page-header {
-            margin-bottom: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 1rem;
         }
 
         .page-sublogo {
@@ -108,8 +109,16 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--accent);
-            opacity: 0.95;
-            display: inline-block;
+        }
+
+        .daily-meta {
+            text-align: right;
+            font-family: monospace;
+            font-size: 0.7rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .game-header {
@@ -181,7 +190,6 @@
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            position: relative;
             transition: border-color 0.3s ease;
         }
 
@@ -226,7 +234,7 @@
             font-size: 1rem;
             font-style: italic;
             color: var(--text-primary);
-            background-color: var(--bg-color);
+            background: var(--bg-color);
             border: 1px solid var(--border);
             border-radius: 4px;
             outline: none;
@@ -237,6 +245,11 @@
             border-color: var(--accent);
         }
 
+        .game-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .feedback-message {
             font-family: monospace;
             font-size: 0.8rem;
@@ -245,7 +258,6 @@
             min-height: 1.2rem;
             opacity: 0;
             transition: opacity 0.3s ease;
-            margin-top: -0.25rem;
         }
 
         .feedback-message.visible {
@@ -265,7 +277,7 @@
             border-radius: 0 0 4px 4px;
             z-index: 50;
             display: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
         }
 
         .dropdown-list.active {
@@ -339,7 +351,6 @@
             cursor: pointer;
             background: transparent;
             transition: color 0.2s ease;
-            margin-top: 0.25rem;
         }
 
         .btn-skip:hover {
@@ -356,7 +367,7 @@
             gap: 1.5rem;
             text-align: center;
             align-items: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .status-display.active {
@@ -370,13 +381,12 @@
             text-transform: uppercase;
             padding: 0.4rem 1rem;
             border-radius: 50px;
-            display: inline-block;
         }
 
         .status-header-badge.win {
             color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.3);
         }
 
         .status-header-badge.fail {
@@ -389,7 +399,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            background: rgba(8, 8, 11, 0.6);
+            background: rgba(8,8,11,0.6);
             border: 1px solid var(--border);
             padding: 1.25rem;
             border-radius: 4px;
@@ -403,11 +413,8 @@
             border-radius: 4px;
             border: 1px solid var(--border);
             flex-shrink: 0;
-            background-color: #12121a;
+            background: #12121a;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .film-poster-img {
@@ -427,7 +434,6 @@
         .film-title-text {
             font-size: 1.35rem;
             font-style: italic;
-            color: var(--text-primary);
         }
 
         .film-subtext {
@@ -458,21 +464,26 @@
             border: none;
         }
 
+        .loading {
+            font-family: monospace;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 1rem;
+        }
+
         footer {
             margin-top: auto;
             padding-top: 3rem;
             font-family: monospace;
             font-size: 0.75rem;
-            color: rgba(110, 110, 128, 0.3);
+            color: rgba(110,110,128,0.3);
             letter-spacing: 1.5px;
             text-align: center;
             width: 100%;
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
+            body { padding: 1rem; }
 
             nav {
                 padding: 1.5rem;
@@ -486,13 +497,16 @@
                 justify-content: center;
             }
 
-            main {
-                padding-top: 155px;
-            }
+            main { padding-top: 155px; }
 
+            .page-header,
             .game-header {
                 align-items: flex-start;
                 flex-direction: column;
+            }
+
+            .daily-meta {
+                text-align: left;
             }
 
             .film-card-summary {
@@ -510,7 +524,6 @@
 <body>
     <nav>
         <a href="/" class="nav-logo">// f&amp;e</a>
-
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="quotes">Quotes</a></li>
@@ -523,35 +536,26 @@
     <main>
         <div class="page-header">
             <span class="page-sublogo">// CIPHER</span>
+
+            <div class="daily-meta">
+                <div id="dailyNumber">DAILY CIPHER #001</div>
+                <div id="nextReset">NEXT FILM — --:--:--</div>
+            </div>
         </div>
 
         <div class="game-header">
             <span class="game-title">Guess The Film</span>
 
             <div class="clue-nav-wrapper">
-                <button
-                    type="button"
-                    class="clue-nav-btn"
-                    id="prevClueBtn"
-                    title="Previous Clue"
-                    aria-label="Previous clue"
-                >&lt;</button>
-
+                <button type="button" class="clue-nav-btn" id="prevClueBtn">&lt;</button>
                 <span class="clue-counter" id="clueCounter">HINT 1 / 5</span>
-
-                <button
-                    type="button"
-                    class="clue-nav-btn"
-                    id="nextClueBtn"
-                    title="Next Unlocked Clue"
-                    aria-label="Next clue"
-                >&gt;</button>
+                <button type="button" class="clue-nav-btn" id="nextClueBtn">&gt;</button>
             </div>
         </div>
 
-        <div class="clue-card">
-            <span class="clue-type-badge" id="clueTypeBadge">Initial Quote</span>
-            <div class="clue-text" id="clueText">Loading quote...</div>
+        <div class="clue-card" id="clueCard">
+            <span class="clue-type-badge" id="clueTypeBadge">INITIAL QUOTE</span>
+            <div class="clue-text" id="clueText">Loading today's cipher...</div>
         </div>
 
         <div class="game-controls" id="gameControls">
@@ -563,22 +567,14 @@
                     placeholder="Type film title to guess..."
                     autocomplete="off"
                     spellcheck="false"
-                    aria-label="Film title guess"
-                    aria-autocomplete="list"
-                    aria-controls="dropdownList"
+                    disabled
                 >
-
                 <div class="dropdown-list" id="dropdownList" role="listbox"></div>
             </div>
 
-            <div
-                class="feedback-message"
-                id="feedbackMessage"
-                role="status"
-                aria-live="polite"
-            ></div>
+            <div class="feedback-message" id="feedbackMessage" role="status"></div>
 
-            <button type="button" class="btn-skip" id="skipBtn">
+            <button type="button" class="btn-skip" id="skipBtn" disabled>
                 SKIP &amp; UNLOCK HINT (+1 TRY)
             </button>
         </div>
@@ -588,27 +584,17 @@
 
             <div class="film-card-summary">
                 <div class="film-poster-container">
-                    <img
-                        class="film-poster-img"
-                        id="filmPosterImg"
-                        src=""
-                        alt="Film poster"
-                        loading="lazy"
-                    >
+                    <img class="film-poster-img" id="filmPosterImg" alt="Film poster">
                 </div>
 
                 <div class="film-meta-details">
-                    <div class="film-title-text" id="filmTitleText">Mulholland Drive</div>
-                    <div class="film-subtext" id="filmDirectorText">
-                        2001 • Dir. David Lynch
-                    </div>
-                    <div class="solve-stats" id="solveStatsText">
-                        Solved on Guess 1 of 5
-                    </div>
+                    <div class="film-title-text" id="filmTitleText"></div>
+                    <div class="film-subtext" id="filmDirectorText"></div>
+                    <div class="solve-stats" id="solveStatsText"></div>
                 </div>
             </div>
 
-            <div class="media-frame-wrapper" id="mediaWrapper">
+            <div class="media-frame-wrapper">
                 <iframe
                     class="media-iframe"
                     id="mediaIframe"
@@ -629,146 +615,514 @@
         "use strict";
 
         /*
-         * NOTE:
-         * The TMDB API key was present in the original client-side file.
-         * Any key embedded in frontend JavaScript is visible to visitors.
-         * Restrict the key in TMDB's dashboard or move API requests to a backend
-         * if this site is public.
+         * CIPHER DAILY FILM DATABASE
+         *
+         * The database contains 100 films. The day determines which film is
+         * active, using Europe/London as the authoritative calendar.
+         *
+         * After film #100, the database cycles back to #1.
+         *
+         * TMDB is used to fetch:
+         * - poster
+         * - release year
+         * - director
+         * - lead actor
+         * - trailer
+         *
+         * TMDB supports movie details with append_to_response, allowing
+         * details/credits/videos to be fetched together.
          */
 
         const TMDB_API_KEY = "a2423ea9535bda58e2447a6a29d92cb6";
+
+        const UK_TIME_ZONE = "Europe/London";
+        const DATABASE_START_DATE = "2026-08-19";
         const MAX_ATTEMPTS = 5;
 
-        const targetMovie = {
-            tmdbId: 1018,
-            title: "Mulholland Drive",
-            year: "2001",
-            director: "David Lynch",
-            leadActor: "Naomi Watts",
-            keyActorMovie: "The Ring (2002) & King Kong (2005)",
-            posterPath: "/tVxGt7uffLVhIIcwul4oP4H2l4G.jpg",
-            youtubeKey: "SL8mq7H9-GA"
-        };
-
-        const hintsList = [
-            {
-                type: "Quote",
-                text: "\"I opened my eyes and I was completely lost. Nothing makes sense, but every single scene is hypnotizing.\""
-            },
-            {
-                type: "Hint 1 (Key Actor Movie)",
-                text: `Key actor starred in: ${targetMovie.keyActorMovie}`
-            },
-            {
-                type: "Hint 2 (Lead Actor)",
-                text: `Lead Actor: ${targetMovie.leadActor}`
-            },
-            {
-                type: "Hint 3 (Release Year)",
-                text: `Release Year: ${targetMovie.year}`
-            },
-            {
-                type: "Hint 4 (Director)",
-                text: `Director: ${targetMovie.director}`
-            }
+        const FILM_DATABASE = [
+            "Mulholland Drive",
+            "The Seventh Seal",
+            "Seven Samurai",
+            "Stalker",
+            "In the Mood for Love",
+            "2001: A Space Odyssey",
+            "Persona",
+            "The Godfather",
+            "Apocalypse Now",
+            "Taxi Driver",
+            "Raging Bull",
+            "Goodfellas",
+            "Pulp Fiction",
+            "Reservoir Dogs",
+            "Fight Club",
+            "Se7en",
+            "The Silence of the Lambs",
+            "The Shining",
+            "The Thing",
+            "Alien",
+            "Blade Runner",
+            "Blade Runner 2049",
+            "Arrival",
+            "Prisoners",
+            "Zodiac",
+            "Gone Girl",
+            "No Country for Old Men",
+            "There Will Be Blood",
+            "The Social Network",
+            "Whiplash",
+            "La La Land",
+            "Moonlight",
+            "Parasite",
+            "Memories of Murder",
+            "Oldboy",
+            "The Handmaiden",
+            "Burning",
+            "Decision to Leave",
+            "Perfect Blue",
+            "Akira",
+            "Spirited Away",
+            "Princess Mononoke",
+            "My Neighbor Totoro",
+            "Grave of the Fireflies",
+            "Your Name",
+            "Paprika",
+            "Tokyo Story",
+            "Ikiru",
+            "Rashomon",
+            "Yojimbo",
+            "Harakiri",
+            "Ran",
+            "The Wages of Fear",
+            "The 400 Blows",
+            "Breathless",
+            "La Haine",
+            "Amélie",
+            "Portrait of a Lady on Fire",
+            "The Lives of Others",
+            "Wings of Desire",
+            "Cinema Paradiso",
+            "8½",
+            "La Dolce Vita",
+            "Bicycle Thieves",
+            "The Battle of Algiers",
+            "Lawrence of Arabia",
+            "Chinatown",
+            "Rear Window",
+            "Vertigo",
+            "Psycho",
+            "North by Northwest",
+            "Sunset Boulevard",
+            "Citizen Kane",
+            "Casablanca",
+            "The Third Man",
+            "12 Angry Men",
+            "One Flew Over the Cuckoo's Nest",
+            "Eternal Sunshine of the Spotless Mind",
+            "Her",
+            "The Truman Show",
+            "Being John Malkovich",
+            "The Prestige",
+            "Memento",
+            "Inception",
+            "Interstellar",
+            "The Grand Budapest Hotel",
+            "Fantastic Mr. Fox",
+            "The Royal Tenenbaums",
+            "Eraserhead",
+            "Blue Velvet",
+            "Lost Highway",
+            "The Elephant Man",
+            "Fargo",
+            "Inside Llewyn Davis",
+            "Burn After Reading",
+            "A Serious Man",
+            "The Big Lebowski",
+            "Before Sunrise",
+            "Before Sunset",
+            "Before Midnight",
+            "The Worst Person in the World"
         ];
 
+        const els = {
+            dailyNumber: document.getElementById("dailyNumber"),
+            nextReset: document.getElementById("nextReset"),
+            clueCounter: document.getElementById("clueCounter"),
+            clueTypeBadge: document.getElementById("clueTypeBadge"),
+            clueText: document.getElementById("clueText"),
+            clueCard: document.getElementById("clueCard"),
+            prevClueBtn: document.getElementById("prevClueBtn"),
+            nextClueBtn: document.getElementById("nextClueBtn"),
+            gameControls: document.getElementById("gameControls"),
+            gameInput: document.getElementById("gameInput"),
+            dropdownList: document.getElementById("dropdownList"),
+            feedbackMessage: document.getElementById("feedbackMessage"),
+            skipBtn: document.getElementById("skipBtn"),
+            statusDisplay: document.getElementById("statusDisplay"),
+            statusBadge: document.getElementById("statusBadge"),
+            filmPosterImg: document.getElementById("filmPosterImg"),
+            filmTitleText: document.getElementById("filmTitleText"),
+            filmDirectorText: document.getElementById("filmDirectorText"),
+            solveStatsText: document.getElementById("solveStatsText"),
+            mediaIframe: document.getElementById("mediaIframe")
+        };
+
+        let currentFilm = null;
+        let hintsList = [];
         let attemptsUsed = 0;
         let unlockedClueIndex = 0;
         let viewedClueIndex = 0;
+        let isGameOver = false;
         let debounceTimer = null;
         let searchRequestId = 0;
-        let isGameOver = false;
+        let resetTimer = null;
 
-        const clueCounter = document.getElementById("clueCounter");
-        const clueTypeBadge = document.getElementById("clueTypeBadge");
-        const clueText = document.getElementById("clueText");
-        const prevClueBtn = document.getElementById("prevClueBtn");
-        const nextClueBtn = document.getElementById("nextClueBtn");
-        const gameInput = document.getElementById("gameInput");
-        const dropdownList = document.getElementById("dropdownList");
-        const feedbackMessage = document.getElementById("feedbackMessage");
-        const skipBtn = document.getElementById("skipBtn");
-        const gameControls = document.getElementById("gameControls");
-        const statusDisplay = document.getElementById("statusDisplay");
-        const statusBadge = document.getElementById("statusBadge");
-        const filmPosterImg = document.getElementById("filmPosterImg");
-        const filmTitleText = document.getElementById("filmTitleText");
-        const filmDirectorText = document.getElementById("filmDirectorText");
-        const solveStatsText = document.getElementById("solveStatsText");
-        const mediaIframe = document.getElementById("mediaIframe");
+        function getUKDateParts(date = new Date()) {
+            const parts = new Intl.DateTimeFormat("en-CA", {
+                timeZone: UK_TIME_ZONE,
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }).formatToParts(date);
 
-        function updateClueDisplay() {
-            const currentClue = hintsList[viewedClueIndex];
+            const result = {};
 
-            if (!currentClue) {
-                return;
+            for (const part of parts) {
+                if (part.type !== "literal") {
+                    result[part.type] = part.value;
+                }
             }
 
-            clueCounter.textContent =
+            return {
+                year: Number(result.year),
+                month: Number(result.month),
+                day: Number(result.day)
+            };
+        }
+
+        function getUKDateKey(date = new Date()) {
+            const { year, month, day } = getUKDateParts(date);
+
+            return [
+                year,
+                String(month).padStart(2, "0"),
+                String(day).padStart(2, "0")
+            ].join("-");
+        }
+
+        function parseUTCDate(dateString) {
+            const [year, month, day] = dateString.split("-").map(Number);
+            return Date.UTC(year, month - 1, day);
+        }
+
+        function getDailyIndex(dateKey) {
+            const start = parseUTCDate(DATABASE_START_DATE);
+            const current = parseUTCDate(dateKey);
+            const elapsedDays = Math.floor((current - start) / 86400000);
+
+            // Positive modulo so the database cycles forever.
+            return ((elapsedDays % FILM_DATABASE.length) +
+                FILM_DATABASE.length) % FILM_DATABASE.length;
+        }
+
+        function getDailyNumber(dateKey) {
+            const start = parseUTCDate(DATABASE_START_DATE);
+            const current = parseUTCDate(dateKey);
+            const elapsedDays = Math.floor((current - start) / 86400000);
+
+            return elapsedDays + 1;
+        }
+
+        function getCurrentDailyFilm() {
+            const dateKey = getUKDateKey();
+            const index = getDailyIndex(dateKey);
+
+            return {
+                dateKey,
+                index,
+                dailyNumber: getDailyNumber(dateKey),
+                title: FILM_DATABASE[index]
+            };
+        }
+
+        function getNextUKMidnight() {
+            const now = new Date();
+            const currentKey = getUKDateKey(now);
+            const currentParts = getUKDateParts(now);
+
+            /*
+             * Find the next instant whose London-local calendar date is
+             * different from the current one. This handles GMT/BST correctly
+             * instead of assuming London is always UTC+0.
+             */
+            let candidate = new Date(now.getTime() + 60000);
+
+            for (let i = 0; i < 36; i++) {
+                if (getUKDateKey(candidate) !== currentKey) {
+                    // Binary search the transition to midnight.
+                    let low = new Date(candidate.getTime() - 120000);
+                    let high = candidate;
+
+                    for (let j = 0; j < 35; j++) {
+                        const middle = new Date(
+                            (low.getTime() + high.getTime()) / 2
+                        );
+
+                        if (getUKDateKey(middle) === currentKey) {
+                            low = middle;
+                        } else {
+                            high = middle;
+                        }
+                    }
+
+                    return high;
+                }
+
+                candidate = new Date(candidate.getTime() + 60 * 60 * 1000);
+            }
+
+            // Extremely defensive fallback.
+            return new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        }
+
+        function updateCountdown() {
+            const next = getNextUKMidnight();
+            const remaining = Math.max(0, next.getTime() - Date.now());
+
+            const totalSeconds = Math.floor(remaining / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            els.nextReset.textContent =
+                `NEXT FILM — ${String(hours).padStart(2, "0")}:` +
+                `${String(minutes).padStart(2, "0")}:` +
+                `${String(seconds).padStart(2, "0")}`;
+        }
+
+        function saveDailyState() {
+            if (!currentFilm) return;
+
+            const key = `cipher-${currentFilm.dateKey}`;
+
+            localStorage.setItem(key, JSON.stringify({
+                attemptsUsed,
+                unlockedClueIndex,
+                viewedClueIndex,
+                isGameOver
+            }));
+        }
+
+        function loadDailyState() {
+            if (!currentFilm) return null;
+
+            try {
+                const raw = localStorage.getItem(`cipher-${currentFilm.dateKey}`);
+                return raw ? JSON.parse(raw) : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function updateClueDisplay() {
+            const clue = hintsList[viewedClueIndex];
+
+            if (!clue) return;
+
+            els.clueCounter.textContent =
                 `HINT ${viewedClueIndex + 1} / ${hintsList.length}`;
 
-            clueTypeBadge.textContent = currentClue.type;
-            clueText.textContent = currentClue.text;
+            els.clueTypeBadge.textContent = clue.type;
+            els.clueText.textContent = clue.text;
 
-            prevClueBtn.disabled = viewedClueIndex === 0;
-            nextClueBtn.disabled =
+            els.prevClueBtn.disabled = viewedClueIndex === 0;
+            els.nextClueBtn.disabled =
                 viewedClueIndex >= unlockedClueIndex;
         }
 
-        async function fetchTMDBMovies(query, requestId) {
-            if (!TMDB_API_KEY) {
-                throw new Error("TMDB API key is missing.");
+        function advanceClue() {
+            if (unlockedClueIndex >= hintsList.length - 1) {
+                return;
             }
 
-            const params = new URLSearchParams({
-                api_key: TMDB_API_KEY,
-                query,
-                include_adult: "false",
-                language: "en-US"
-            });
+            unlockedClueIndex++;
+            viewedClueIndex = unlockedClueIndex;
 
-            const url =
-                `https://api.themoviedb.org/3/search/movie?${params.toString()}`;
+            updateClueDisplay();
+            saveDailyState();
+        }
 
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    Accept: "application/json"
-                }
-            });
+        function showFeedback(message) {
+            els.feedbackMessage.textContent = message;
+            els.feedbackMessage.classList.add("visible");
+        }
 
-            if (requestId !== searchRequestId) {
-                return null;
-            }
-
-            if (!response.ok) {
-                throw new Error(`TMDB request failed (${response.status}).`);
-            }
-
-            const data = await response.json();
-            return Array.isArray(data.results) ? data.results : [];
+        function hideFeedback() {
+            els.feedbackMessage.textContent = "";
+            els.feedbackMessage.classList.remove("visible");
         }
 
         function clearDropdown() {
-            dropdownList.innerHTML = "";
-            dropdownList.classList.remove("active");
+            els.dropdownList.replaceChildren();
+            els.dropdownList.classList.remove("active");
         }
 
         function showDropdownMessage(message) {
-            dropdownList.textContent = "";
+            els.dropdownList.replaceChildren();
 
-            const messageElement = document.createElement("div");
-            messageElement.className = "dropdown-item status-msg";
-            messageElement.textContent = message;
+            const item = document.createElement("div");
+            item.className = "dropdown-item status-msg";
+            item.textContent = message;
 
-            dropdownList.appendChild(messageElement);
-            dropdownList.classList.add("active");
+            els.dropdownList.appendChild(item);
+            els.dropdownList.classList.add("active");
         }
 
-        function createDropdownItem(movie) {
-            const item = document.createElement("div");
+        async function tmdbRequest(path, params = {}) {
+            const query = new URLSearchParams({
+                ...params,
+                api_key: TMDB_API_KEY,
+                language: "en-US"
+            });
 
+            const response = await fetch(
+                `https://api.themoviedb.org/3${path}?${query.toString()}`,
+                {
+                    headers: {
+                        Accept: "application/json"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`TMDB request failed (${response.status})`);
+            }
+
+            return response.json();
+        }
+
+        async function resolveFilm(title) {
+            const searchData = await tmdbRequest("/search/movie", {
+                query: title,
+                include_adult: "false"
+            });
+
+            const results = Array.isArray(searchData.results)
+                ? searchData.results
+                : [];
+
+            if (!results.length) {
+                throw new Error(`Could not find "${title}" on TMDB.`);
+            }
+
+            /*
+             * Exact title matches are preferred. This prevents similarly named
+             * films from being selected by the search endpoint.
+             */
+            const normalizedTarget = normalizeStr(title);
+
+            const exact = results.find(movie =>
+                normalizeStr(movie.title) === normalizedTarget
+            );
+
+            const match = exact || results[0];
+
+            return tmdbRequest(`/movie/${match.id}`, {
+                append_to_response: "credits,videos",
+                include_video_language: "en,null"
+            });
+        }
+
+        function chooseDirector(credits) {
+            return credits?.crew?.find(person =>
+                person.job === "Director"
+            )?.name || "Unknown Director";
+        }
+
+        function chooseLeadActor(credits) {
+            const cast = Array.isArray(credits?.cast)
+                ? credits.cast
+                : [];
+
+            return cast[0]?.name || "Unknown";
+        }
+
+        function chooseTrailer(videos) {
+            const results = Array.isArray(videos?.results)
+                ? videos.results
+                : [];
+
+            const preferred = results
+                .filter(video =>
+                    video.site === "YouTube" &&
+                    video.key &&
+                    ["Trailer", "Teaser"].includes(video.type)
+                )
+                .sort((a, b) => {
+                    const aOfficial = a.official ? 1 : 0;
+                    const bOfficial = b.official ? 1 : 0;
+
+                    if (aOfficial !== bOfficial) {
+                        return bOfficial - aOfficial;
+                    }
+
+                    const aTrailer = a.type === "Trailer" ? 1 : 0;
+                    const bTrailer = b.type === "Trailer" ? 1 : 0;
+
+                    return bTrailer - aTrailer;
+                });
+
+            return preferred[0]?.key || null;
+        }
+
+        function buildHints(movie) {
+            const director = chooseDirector(movie.credits);
+            const leadActor = chooseLeadActor(movie.credits);
+
+            const year = movie.release_date
+                ? movie.release_date.substring(0, 4)
+                : "Unknown";
+
+            /*
+             * We deliberately don't expose the title in the clues.
+             * The first clue is generated from the film's overview rather
+             * than inventing a quotation and falsely presenting it as one.
+             */
+            const overview = movie.overview?.trim();
+
+            const openingClue = overview
+                ? `A film described as: "${overview}"`
+                : "The first fragment offers no easy answer.";
+
+            return [
+                {
+                    type: "Initial Fragment",
+                    text: openingClue
+                },
+                {
+                    type: "Hint 1 (Lead Actor)",
+                    text: `Lead actor: ${leadActor}`
+                },
+                {
+                    type: "Hint 2 (Release Year)",
+                    text: `Release year: ${year}`
+                },
+                {
+                    type: "Hint 3 (Director)",
+                    text: `Director: ${director}`
+                },
+                {
+                    type: "Hint 4 (Genre)",
+                    text: `Genre: ${
+                        Array.isArray(movie.genres) && movie.genres.length
+                            ? movie.genres.map(g => g.name).join(" / ")
+                            : "Unknown"
+                    }`
+                }
+            ];
+        }
+
+        function renderSearchResult(movie) {
+            const item = document.createElement("div");
             item.className = "dropdown-item";
             item.setAttribute("role", "option");
             item.tabIndex = 0;
@@ -790,25 +1144,24 @@
 
             const meta = document.createElement("span");
             meta.className = "dropdown-meta";
-            meta.textContent =
-                movie.release_date
-                    ? movie.release_date.substring(0, 4)
-                    : "N/A";
+            meta.textContent = movie.release_date
+                ? movie.release_date.substring(0, 4)
+                : "N/A";
 
             info.append(title, meta);
             item.append(poster, info);
 
-            const selectMovie = () => {
+            const select = () => {
                 clearDropdown();
                 submitGuess(movie.title || "");
             };
 
-            item.addEventListener("click", selectMovie);
+            item.addEventListener("click", select);
 
-            item.addEventListener("keydown", (event) => {
+            item.addEventListener("keydown", event => {
                 if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    selectMovie();
+                    select();
                 }
             });
 
@@ -816,19 +1169,19 @@
         }
 
         function renderDropdown(movies) {
-            dropdownList.replaceChildren();
+            els.dropdownList.replaceChildren();
 
-            movies.slice(0, 5).forEach((movie) => {
-                dropdownList.appendChild(createDropdownItem(movie));
+            movies.slice(0, 5).forEach(movie => {
+                els.dropdownList.appendChild(renderSearchResult(movie));
             });
 
-            dropdownList.classList.toggle("active", movies.length > 0);
+            els.dropdownList.classList.add("active");
         }
 
         function handleInput() {
             clearTimeout(debounceTimer);
 
-            const query = gameInput.value.trim();
+            const query = els.gameInput.value.trim();
             const requestId = ++searchRequestId;
 
             hideFeedback();
@@ -842,24 +1195,29 @@
 
             debounceTimer = setTimeout(async () => {
                 try {
-                    const movies = await fetchTMDBMovies(query, requestId);
+                    const data = await tmdbRequest("/search/movie", {
+                        query,
+                        include_adult: "false"
+                    });
 
-                    if (movies === null || requestId !== searchRequestId) {
+                    if (requestId !== searchRequestId || isGameOver) {
                         return;
                     }
 
-                    if (movies.length === 0) {
+                    const movies = Array.isArray(data.results)
+                        ? data.results
+                        : [];
+
+                    if (!movies.length) {
                         showDropdownMessage("No matching films found.");
                         return;
                     }
 
                     renderDropdown(movies);
                 } catch (error) {
-                    if (requestId !== searchRequestId) {
-                        return;
-                    }
+                    if (requestId !== searchRequestId) return;
 
-                    console.error("TMDB API error:", error);
+                    console.error(error);
                     showDropdownMessage(
                         "Could not reach the cinema database."
                     );
@@ -875,21 +1233,19 @@
                 .replace(/[^a-z0-9]/g, "");
         }
 
-        function submitGuess(selectedTitle) {
-            if (isGameOver || !selectedTitle) {
+        function submitGuess(title) {
+            if (isGameOver || !currentFilm || !title) {
                 return;
             }
 
             attemptsUsed++;
+            els.gameInput.value = "";
             clearDropdown();
-            gameInput.value = "";
 
-            const isCorrect =
-                normalizeStr(selectedTitle) ===
-                normalizeStr(targetMovie.title);
+            const correct =
+                normalizeStr(title) === normalizeStr(currentFilm.title);
 
-            if (isCorrect) {
-                hideFeedback();
+            if (correct) {
                 endGame(true);
                 return;
             }
@@ -900,30 +1256,19 @@
             }
 
             showFeedback(
-                `"${selectedTitle}" is incorrect. ` +
+                `"${title}" is incorrect. ` +
                 `Try ${attemptsUsed}/${MAX_ATTEMPTS} used.`
             );
 
             advanceClue();
-        }
-
-        function showFeedback(message) {
-            feedbackMessage.textContent = message;
-            feedbackMessage.classList.add("visible");
-        }
-
-        function hideFeedback() {
-            feedbackMessage.textContent = "";
-            feedbackMessage.classList.remove("visible");
+            saveDailyState();
         }
 
         function handleSkip() {
-            if (isGameOver) {
-                return;
-            }
+            if (isGameOver) return;
 
             attemptsUsed++;
-            gameInput.value = "";
+            els.gameInput.value = "";
             clearDropdown();
             hideFeedback();
 
@@ -933,85 +1278,37 @@
             }
 
             advanceClue();
+            saveDailyState();
         }
 
-        function advanceClue() {
-            if (unlockedClueIndex >= hintsList.length - 1) {
+        function loadPoster(movie) {
+            if (!movie?.poster_path) {
+                els.filmPosterImg.removeAttribute("src");
+                els.filmPosterImg.alt = "Poster unavailable";
                 return;
             }
 
-            unlockedClueIndex++;
-            viewedClueIndex = unlockedClueIndex;
-            updateClueDisplay();
+            els.filmPosterImg.src =
+                `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+
+            els.filmPosterImg.alt =
+                `${currentFilm.title} poster`;
         }
 
-        function loadTMDBPoster() {
-            const fallbackPath = targetMovie.posterPath;
+        function loadTrailer(movie) {
+            els.mediaIframe.removeAttribute("src");
 
-            const setPoster = (posterPath) => {
-                if (!posterPath) {
-                    filmPosterImg.removeAttribute("src");
-                    filmPosterImg.alt = "Poster unavailable";
-                    return;
-                }
+            const videoId = chooseTrailer(movie.videos);
 
-                filmPosterImg.src =
-                    `https://image.tmdb.org/t/p/w500${posterPath}`;
-                filmPosterImg.alt = `${targetMovie.title} poster`;
-            };
-
-            if (fallbackPath) {
-                setPoster(fallbackPath);
-            }
-
-            if (!TMDB_API_KEY || !targetMovie.tmdbId) {
+            if (!videoId) {
+                console.warn("No embeddable YouTube trailer found.");
                 return;
             }
 
-            const params = new URLSearchParams({
-                api_key: TMDB_API_KEY,
-                language: "en-US"
-            });
-
-            fetch(
-                `https://api.themoviedb.org/3/movie/${targetMovie.tmdbId}?${params.toString()}`,
-                {
-                    headers: {
-                        Accept: "application/json"
-                    }
-                }
-            )
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`TMDB poster request failed (${response.status}).`);
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data.poster_path) {
-                        setPoster(data.poster_path);
-                    }
-                })
-                .catch((error) => {
-                    console.warn("Could not refresh poster from TMDB:", error);
-
-                    if (!fallbackPath) {
-                        filmPosterImg.removeAttribute("src");
-                        filmPosterImg.alt = "Poster unavailable";
-                    }
-                });
-        }
-
-        function loadYouTubeTrailer() {
-            const videoId = String(targetMovie.youtubeKey || "").trim();
-
-            mediaIframe.removeAttribute("src");
-
-            if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
-                console.warn("Invalid YouTube video ID:", videoId);
-                return;
-            }
-
+            /*
+             * Muted autoplay is used because browsers commonly block
+             * autoplay when a video has sound.
+             */
             const params = new URLSearchParams({
                 autoplay: "1",
                 mute: "1",
@@ -1019,114 +1316,274 @@
                 rel: "0"
             });
 
-            mediaIframe.src =
+            els.mediaIframe.src =
                 `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
         }
 
         function endGame(won) {
-            if (isGameOver) {
-                return;
-            }
+            if (isGameOver) return;
 
             isGameOver = true;
-
             clearTimeout(debounceTimer);
             searchRequestId++;
-            clearDropdown();
-            gameControls.style.display = "none";
 
-            // After the game ends, allow the player to browse all clues.
+            clearDropdown();
+
+            els.gameControls.style.display = "none";
+
             unlockedClueIndex = hintsList.length - 1;
-            viewedClueIndex = Math.max(
-                0,
-                Math.min(viewedClueIndex, unlockedClueIndex)
-            );
             updateClueDisplay();
 
-            statusDisplay.classList.add("active");
+            els.statusDisplay.classList.add("active");
 
-            filmTitleText.textContent = targetMovie.title;
-            filmDirectorText.textContent =
-                `${targetMovie.year} • Dir. ${targetMovie.director}`;
+            els.filmTitleText.textContent = currentFilm.title;
 
-            loadTMDBPoster();
+            const director = chooseDirector(currentFilm.credits);
+            const year = currentFilm.release_date
+                ? currentFilm.release_date.substring(0, 4)
+                : "Unknown";
+
+            els.filmDirectorText.textContent =
+                `${year} • Dir. ${director}`;
+
+            loadPoster(currentFilm);
+            loadTrailer(currentFilm);
 
             if (won) {
-                statusBadge.className = "status-header-badge win";
-                statusBadge.textContent = "ENTRY VERIFIED";
+                els.statusBadge.className = "status-header-badge win";
+                els.statusBadge.textContent = "ENTRY VERIFIED";
 
-                solveStatsText.textContent =
+                els.solveStatsText.textContent =
                     `Solved in ${attemptsUsed} ` +
                     `${attemptsUsed === 1 ? "guess" : "guesses"}!`;
             } else {
-                statusBadge.className = "status-header-badge fail";
-                statusBadge.textContent = "ENTRY UNRESOLVED";
+                els.statusBadge.className = "status-header-badge fail";
+                els.statusBadge.textContent = "ENTRY UNRESOLVED";
 
-                solveStatsText.textContent =
+                els.solveStatsText.textContent =
                     `Out of guesses (${attemptsUsed}/${MAX_ATTEMPTS} used).`;
             }
 
-            loadYouTubeTrailer();
+            saveDailyState();
         }
 
-        function initializeGame() {
+        function restoreCompletedState(state) {
+            if (!state?.isGameOver) {
+                return false;
+            }
+
+            attemptsUsed = state.attemptsUsed || MAX_ATTEMPTS;
+            unlockedClueIndex = hintsList.length - 1;
+            viewedClueIndex = hintsList.length - 1;
+            isGameOver = true;
+
+            els.gameControls.style.display = "none";
+            els.statusDisplay.classList.add("active");
+
+            els.filmTitleText.textContent = currentFilm.title;
+
+            const director = chooseDirector(currentFilm.credits);
+            const year = currentFilm.release_date
+                ? currentFilm.release_date.substring(0, 4)
+                : "Unknown";
+
+            els.filmDirectorText.textContent =
+                `${year} • Dir. ${director}`;
+
+            /*
+             * We don't store whether the previous result was a win in the
+             * state above, so infer it from attempts only if desired. For
+             * this version, a completed day is shown as solved/finished.
+             */
+            els.statusBadge.className = "status-header-badge win";
+            els.statusBadge.textContent = "ENTRY COMPLETED";
+
+            els.solveStatsText.textContent =
+                `Daily cipher completed in ${attemptsUsed} ` +
+                `${attemptsUsed === 1 ? "guess" : "guesses"}.`;
+
+            loadPoster(currentFilm);
+            loadTrailer(currentFilm);
             updateClueDisplay();
 
-            prevClueBtn.addEventListener("click", () => {
-                if (viewedClueIndex > 0) {
-                    viewedClueIndex--;
-                    updateClueDisplay();
-                }
-            });
+            return true;
+        }
 
-            nextClueBtn.addEventListener("click", () => {
-                if (viewedClueIndex < unlockedClueIndex) {
-                    viewedClueIndex++;
-                    updateClueDisplay();
-                }
-            });
+        async function startDailyCipher() {
+            const daily = getCurrentDailyFilm();
 
-            gameInput.addEventListener("input", handleInput);
+            currentFilm = {
+                ...daily
+            };
 
-            gameInput.addEventListener("keydown", (event) => {
-                if (event.key === "Escape") {
-                    clearDropdown();
-                    return;
-                }
+            els.dailyNumber.textContent =
+                `DAILY CIPHER #${String(daily.dailyNumber).padStart(3, "0")}`;
 
-                /*
-                 * The actual guess should be selected from the TMDB dropdown.
-                 * Enter therefore does not submit an arbitrary string.
-                 */
-                if (event.key === "Enter") {
-                    event.preventDefault();
+            els.clueText.textContent =
+                `Loading today's film: ${daily.title}...`;
 
-                    const firstItem =
-                        dropdownList.querySelector(".dropdown-item:not(.status-msg)");
+            els.gameInput.disabled = true;
+            els.skipBtn.disabled = true;
 
-                    if (firstItem) {
-                        firstItem.click();
+            try {
+                const movie = await resolveFilm(daily.title);
+
+                currentFilm = {
+                    ...daily,
+                    ...movie
+                };
+
+                hintsList = buildHints(movie);
+
+                attemptsUsed = 0;
+                unlockedClueIndex = 0;
+                viewedClueIndex = 0;
+                isGameOver = false;
+
+                els.statusDisplay.classList.remove("active");
+                els.gameControls.style.display = "flex";
+
+                els.gameInput.disabled = false;
+                els.skipBtn.disabled = false;
+
+                updateClueDisplay();
+
+                const state = loadDailyState();
+
+                if (state) {
+                    attemptsUsed = Number(state.attemptsUsed) || 0;
+                    unlockedClueIndex = Math.min(
+                        Number(state.unlockedClueIndex) || 0,
+                        hintsList.length - 1
+                    );
+                    viewedClueIndex = Math.min(
+                        Number(state.viewedClueIndex) || 0,
+                        unlockedClueIndex
+                    );
+
+                    if (restoreCompletedState(state)) {
+                        return;
                     }
+
+                    updateClueDisplay();
                 }
-            });
+            } catch (error) {
+                console.error("Could not initialize daily cipher:", error);
 
-            skipBtn.addEventListener("click", handleSkip);
+                els.clueTypeBadge.textContent = "DATABASE ERROR";
+                els.clueText.textContent =
+                    "Today's film could not be loaded. Please refresh.";
 
-            document.addEventListener("click", (event) => {
-                if (!event.target.closest(".search-input-wrapper")) {
-                    clearDropdown();
-                }
-            });
-
-            // Don't leave an empty iframe consuming resources before game end.
-            mediaIframe.removeAttribute("src");
+                els.gameInput.disabled = true;
+                els.skipBtn.disabled = true;
+            }
         }
 
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", initializeGame);
-        } else {
-            initializeGame();
+        async function checkForNewDay() {
+            const activeDate = getUKDateKey();
+
+            if (currentFilm && currentFilm.dateKey !== activeDate) {
+                /*
+                 * The page stayed open across UK midnight.
+                 * Completely reinitialize the game for the new film.
+                 */
+                clearTimeout(resetTimer);
+
+                attemptsUsed = 0;
+                unlockedClueIndex = 0;
+                viewedClueIndex = 0;
+                isGameOver = false;
+
+                els.statusDisplay.classList.remove("active");
+                els.gameControls.style.display = "flex";
+                els.gameInput.value = "";
+                els.gameInput.disabled = true;
+                els.skipBtn.disabled = true;
+
+                await startDailyCipher();
+            }
+
+            updateCountdown();
         }
+
+        function scheduleMidnightCheck() {
+            clearTimeout(resetTimer);
+
+            const nextMidnight = getNextUKMidnight();
+            const delay = Math.max(
+                1000,
+                nextMidnight.getTime() - Date.now() + 1000
+            );
+
+            resetTimer = setTimeout(async () => {
+                await checkForNewDay();
+                scheduleMidnightCheck();
+            }, delay);
+        }
+
+        els.prevClueBtn.addEventListener("click", () => {
+            if (viewedClueIndex > 0) {
+                viewedClueIndex--;
+                updateClueDisplay();
+                saveDailyState();
+            }
+        });
+
+        els.nextClueBtn.addEventListener("click", () => {
+            if (viewedClueIndex < unlockedClueIndex) {
+                viewedClueIndex++;
+                updateClueDisplay();
+                saveDailyState();
+            }
+        });
+
+        els.gameInput.addEventListener("input", handleInput);
+
+        els.gameInput.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                clearDropdown();
+                return;
+            }
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+
+                const firstResult =
+                    els.dropdownList.querySelector(
+                        ".dropdown-item:not(.status-msg)"
+                    );
+
+                if (firstResult) {
+                    firstResult.click();
+                }
+            }
+        });
+
+        els.skipBtn.addEventListener("click", handleSkip);
+
+        document.addEventListener("click", event => {
+            if (!event.target.closest(".search-input-wrapper")) {
+                clearDropdown();
+            }
+        });
+
+        /*
+         * If the user leaves the tab open overnight, visibility changes are
+         * also checked so the new cipher appears immediately when they return.
+         */
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                checkForNewDay();
+            }
+        });
+
+        // Countdown updates once per second.
+        setInterval(updateCountdown, 1000);
+
+        // Start today's cipher.
+        startDailyCipher();
+        scheduleMidnightCheck();
+        updateCountdown();
     </script>
 </body>
 </html>
